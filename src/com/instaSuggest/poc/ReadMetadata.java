@@ -15,11 +15,11 @@ import com.drew.metadata.Metadata;
 import com.drew.metadata.Tag;
 import com.drew.metadata.exif.ExifDirectoryBase;
 
-public class ReadImageWithBufferImage {
+public class ReadMetadata {
 
 	public static void main(String[] args) throws IOException, ImageProcessingException{
 		Metadata metaData = ImageMetadataReader.readMetadata(new File(
-				"/Users/sumitpoddar/git/InstaSuggest/resource/902184_0_9999_med_v1_m56577569855077244.png"));
+				"/Users/sumitpoddar/git/InstaSuggest/resource/iphone6-plus-box-silver-2014.jpeg"));
 		Iterable<Directory> directoryItr = metaData.getDirectories();//getDirectoriesOfType( ExifDirectoryBase.class );
 		Iterator<Directory> dItr = directoryItr.iterator();
 		Directory directory = null;
