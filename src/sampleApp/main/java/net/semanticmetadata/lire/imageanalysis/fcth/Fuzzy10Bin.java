@@ -37,7 +37,7 @@
  *     http://www.semanticmetadata.net/lire, http://www.lire-project.net
  */
 
-package net.semanticmetadata.lire.imageanalysis.fcth;
+package sampleApp.main.java.net.semanticmetadata.lire.imageanalysis.fcth;
 
 public class Fuzzy10Bin {
     public boolean KeepPreviuesValues = false;

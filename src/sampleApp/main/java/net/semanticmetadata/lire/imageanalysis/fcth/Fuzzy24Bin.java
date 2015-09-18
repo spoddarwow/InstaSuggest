@@ -36,7 +36,7 @@
  * (c) 2002-2013 by Mathias Lux (mathias@juggle.at)
  *     http://www.semanticmetadata.net/lire, http://www.lire-project.net
  */
-package net.semanticmetadata.lire.imageanalysis.fcth;
+package sampleApp.main.java.net.semanticmetadata.lire.imageanalysis.fcth;
 
 /**
  * The FCTH feature was created, implemented and provided by Savvas A. Chatzichristofis<br/>

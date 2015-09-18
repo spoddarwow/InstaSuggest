@@ -39,7 +39,7 @@
  * Updated: 26.04.13 09:03
  */
 
-package net.semanticmetadata.lire.utils;
+package sampleApp.main.java.net.semanticmetadata.lire.utils;
 
 import java.io.*;
 import java.util.*;

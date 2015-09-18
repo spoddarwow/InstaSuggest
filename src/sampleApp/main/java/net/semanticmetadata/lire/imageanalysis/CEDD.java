@@ -39,14 +39,28 @@
  * Updated: 16.01.15 10:26
  */
 
-package net.semanticmetadata.lire.imageanalysis;
+package sampleApp.main.java.net.semanticmetadata.lire.imageanalysis;
 
+import sampleApp.main.java.net.semanticmetadata.lire.DocumentBuilder;
+import sampleApp.main.java.net.semanticmetadata.lire.imageanalysis.cedd.CEDDQuant;
+import sampleApp.main.java.net.semanticmetadata.lire.imageanalysis.cedd.CompactCEDDQuant;
+import sampleApp.main.java.net.semanticmetadata.lire.imageanalysis.cedd.Fuzzy10Bin;
+import sampleApp.main.java.net.semanticmetadata.lire.imageanalysis.cedd.Fuzzy24Bin;
+import sampleApp.main.java.net.semanticmetadata.lire.imageanalysis.cedd.MaskResults;
+import sampleApp.main.java.net.semanticmetadata.lire.imageanalysis.cedd.Neighborhood;
+import sampleApp.main.java.net.semanticmetadata.lire.imageanalysis.cedd.RGB2HSV;
+import sampleApp.main.java.net.semanticmetadata.lire.utils.ImageUtils;
+
+import sampleApp.main.java.net.semanticmetadata.lire.utils.SerializationUtils;
+
+
+/*
 import net.semanticmetadata.lire.DocumentBuilder;
 import net.semanticmetadata.lire.imageanalysis.cedd.*;
 import net.semanticmetadata.lire.utils.ImageUtils;
 import net.semanticmetadata.lire.utils.MetricsUtils;
 import net.semanticmetadata.lire.utils.SerializationUtils;
-
+*/
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
 import java.util.StringTokenizer;

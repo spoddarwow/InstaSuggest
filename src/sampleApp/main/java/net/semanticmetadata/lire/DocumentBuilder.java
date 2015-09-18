@@ -39,7 +39,7 @@
  * Updated: 07.07.13 08:40
  */
 
-package net.semanticmetadata.lire;
+package sampleApp.main.java.net.semanticmetadata.lire;
 
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;

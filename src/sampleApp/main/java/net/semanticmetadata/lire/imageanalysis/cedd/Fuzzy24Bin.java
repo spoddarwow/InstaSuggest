@@ -37,7 +37,7 @@
  *     http://www.semanticmetadata.net/lire, http://www.lire-project.net
  */
 
-package net.semanticmetadata.lire.imageanalysis.cedd;
+package sampleApp.main.java.net.semanticmetadata.lire.imageanalysis.cedd;
 
 public class Fuzzy24Bin {
     public double[] ResultsTable = new double[3];

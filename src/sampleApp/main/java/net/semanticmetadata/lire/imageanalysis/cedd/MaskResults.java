@@ -37,7 +37,7 @@
  *     http://www.semanticmetadata.net/lire, http://www.lire-project.net
  */
 
-package net.semanticmetadata.lire.imageanalysis.cedd;
+package sampleApp.main.java.net.semanticmetadata.lire.imageanalysis.cedd;
 
 public class MaskResults {
     public double Mask1;

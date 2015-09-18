@@ -10,9 +10,12 @@ public class ReadImageWithBufferedImage {
 
 	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
-	BufferedImage image = ImageIO.read(new File(
-				"/Users/sumitpoddar/git/InstaSuggest/resource/iphone6-plus-box-silver-2014.jpeg"));
-	System.out.println(image.getRaster());
+		System.out.println(new File(
+				"C:\\Sumit\\Git_Repo_Luna\\230814\\InstaSuggest\\resource\\iphone6-plus-box-silver-2014.jpeg").exists());
+		
+		BufferedImage image = ImageIO.read(new File(
+				"C:\\Sumit\\Git_Repo_Luna\\230814\\InstaSuggest\\resource\\iphone6-plus-box-silver-2014.jpeg"));
+		System.out.println(image.getRaster());
 	}
 
 }
