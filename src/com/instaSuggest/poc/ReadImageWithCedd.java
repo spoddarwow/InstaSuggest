@@ -9,7 +9,7 @@ import javax.imageio.ImageIO;
 
 //import net.semanticmetadata.lire.imageanalysis.CEDD;
 
-import sampleApp.main.java.net.semanticmetadata.lire.imageanalysis.CEDD;
+import net.semanticmetadata.lire.imageanalysis.CEDD;
 
 import com.drew.imaging.ImageProcessingException;
 
@@ -20,13 +20,33 @@ public class ReadImageWithCedd {
 		CEDD c = new CEDD();
 		BufferedImage img = ImageIO
 				.read(new File(
-						"C:\\Sumit\\Git_Repo_Luna\\230814\\InstaSuggest\\resource\\iphone6-plus-box-silver-2014.jpeg"));
+						"/Users/sumitpoddar/git/InstaSuggest/resource/iphone6-plus-box-silver-2014.jpeg"));
 		c.extract(img);
 		String s = Arrays.toString(c.getDoubleHistogram());
 		System.out.println("s = " + s);
 		byte[] b = c.getByteArrayRepresentation();
 		CEDD d = new CEDD();
-		d.setByteArrayRepresentation(b);
+		img = ImageIO
+				.read(new File(
+						"/Users/sumitpoddar/git/InstaSuggest/resource/icon_connections.jpg"));
+		d.extract(img);
+		//d.setByteArrayRepresentation(b);
+		System.out.println(d.getDistance(c));
+		System.out.println("-=-=-=-");
+		d = new CEDD();
+		img = ImageIO
+				.read(new File(
+						"/Users/sumitpoddar/git/InstaSuggest/resource/valcano.jpg"));
+		d.extract(img);
+		//d.setByteArrayRepresentation(b);
+		System.out.println(d.getDistance(c));
+		System.out.println("-=-=-=-");
+		d = new CEDD();
+		img = ImageIO
+				.read(new File(
+						"/Users/sumitpoddar/git/InstaSuggest/resource/iphone6_silver.JPG"));
+		d.extract(img);
+		//d.setByteArrayRepresentation(b);
 		System.out.println(d.getDistance(c));
 
 	}
