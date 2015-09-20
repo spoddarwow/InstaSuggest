@@ -37,7 +37,7 @@
  *     http://www.semanticmetadata.net/lire, http://www.lire-project.net
  */
 
-package sampleApp.main.java.net.semanticmetadata.lire;
+package net.semanticmetadata.lire;
 
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.IndexReader;

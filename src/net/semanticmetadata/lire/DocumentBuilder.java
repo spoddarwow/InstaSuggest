@@ -39,15 +39,15 @@
  * Updated: 07.07.13 08:40
  */
 
-package main.java.net.semanticmetadata.lire;
-
-import org.apache.lucene.document.Document;
-import org.apache.lucene.document.Field;
+package net.semanticmetadata.lire;
 
 import java.awt.image.BufferedImage;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+
+import org.apache.lucene.document.Document;
+import org.apache.lucene.document.Field;
 
 /**
  * <h2>Creating an Index</h2>

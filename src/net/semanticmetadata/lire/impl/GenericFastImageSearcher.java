@@ -38,25 +38,29 @@
  *
  * Updated: 18.01.15 07:31
  */
-package sampleApp.main.java.net.semanticmetadata.lire.impl;
+package net.semanticmetadata.lire.impl;
+
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.TreeSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import net.semanticmetadata.lire.AbstractImageSearcher;
 import net.semanticmetadata.lire.DocumentBuilder;
 import net.semanticmetadata.lire.ImageDuplicates;
 import net.semanticmetadata.lire.ImageSearchHits;
 import net.semanticmetadata.lire.imageanalysis.LireFeature;
-import net.semanticmetadata.lire.imageanalysis.sift.FloatArray;
 import net.semanticmetadata.lire.utils.ImageUtils;
+
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.MultiFields;
 import org.apache.lucene.util.Bits;
-
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * This file is part of the Caliph and Emir project: http://www.SemanticMetadata.net

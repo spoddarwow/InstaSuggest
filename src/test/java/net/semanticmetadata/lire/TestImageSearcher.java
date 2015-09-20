@@ -41,32 +41,38 @@
 
 package sampleApp.test.java.net.semanticmetadata.lire;
 
-import junit.framework.TestCase;
+import java.awt.image.BufferedImage;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.concurrent.LinkedBlockingQueue;
+
+import javax.imageio.ImageIO;
+
+import net.semanticmetadata.lire.DocumentBuilder;
 import net.semanticmetadata.lire.DocumentBuilderFactory;
+import net.semanticmetadata.lire.ImageDuplicates;
+import net.semanticmetadata.lire.ImageSearchHits;
+import net.semanticmetadata.lire.ImageSearcher;
+import net.semanticmetadata.lire.ImageSearcherFactory;
 import net.semanticmetadata.lire.imageanalysis.CEDD;
 import net.semanticmetadata.lire.imageanalysis.LireFeature;
 import net.semanticmetadata.lire.imageanalysis.ScalableColor;
 import net.semanticmetadata.lire.impl.ChainedDocumentBuilder;
 import net.semanticmetadata.lire.impl.GenericFastImageSearcher;
-import net.semanticmetadata.lire.impl.custom.SingleNddCeddImageSearcher;
 import net.semanticmetadata.lire.impl.SimpleResult;
 import net.semanticmetadata.lire.impl.VisualWordsImageSearcher;
+import net.semanticmetadata.lire.impl.custom.SingleNddCeddImageSearcher;
 
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.BytesRef;
-
-import sampleApp.main.java.net.semanticmetadata.lire.ImageSearcher;
-
-import javax.imageio.ImageIO;
-
-import java.awt.image.BufferedImage;
-import java.io.*;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * This file is part of Caliph & Emir
