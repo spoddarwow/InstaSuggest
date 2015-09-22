@@ -53,6 +53,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 import javax.imageio.ImageIO;
 
+import junit.framework.TestCase;
 import net.semanticmetadata.lire.DocumentBuilder;
 import net.semanticmetadata.lire.DocumentBuilderFactory;
 import net.semanticmetadata.lire.ImageDuplicates;
