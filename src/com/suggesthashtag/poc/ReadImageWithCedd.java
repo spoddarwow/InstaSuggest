@@ -1,4 +1,4 @@
-package com.instaSuggest.poc;
+package com.suggesthashtag.poc;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
