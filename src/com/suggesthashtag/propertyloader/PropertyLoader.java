@@ -13,6 +13,7 @@ import com.suggesthashtag.propertyloader.datatype.BasicBooleanType;
 import com.suggesthashtag.propertyloader.datatype.BasicDoubleType;
 import com.suggesthashtag.propertyloader.datatype.BasicFloatType;
 import com.suggesthashtag.propertyloader.datatype.BasicIntegerType;
+import com.suggesthashtag.propertyloader.datatype.BasicStringType;
 import com.suggesthashtag.propertyloader.datatype.DataTypeEnum;
 
 /**
@@ -20,13 +21,13 @@ import com.suggesthashtag.propertyloader.datatype.DataTypeEnum;
  */
 public class PropertyLoader {
 
-	private Properties property = new Properties();
+	private static Properties property = new Properties();
 
-	public void load(PropertyLoaderDetails propFileDetails) {
-		load(propFileDetails);
+	public void load(PropertyLoaderDetails propFileDetails) throws IOException {
+		loadAllPropertyFile(propFileDetails);
 	}
 
-	public void load(PropertyLoaderDetails... propFileDetailList)
+	public void loadAllPropertyFile(PropertyLoaderDetails... propFileDetailList)
 			throws IOException {
 		for (PropertyLoaderDetails propFileDetails : propFileDetailList) {
 			InputStream inputStream = PropertyLoader.class.getClassLoader()
@@ -34,10 +35,15 @@ public class PropertyLoader {
 			if (inputStream != null) {
 				property.load(inputStream);
 			} else {
-				throw new FileNotFoundException(
-						"property file 'demo.prop' not found in the classpath");
+				throw new FileNotFoundException("property file "
+						+ propFileDetails.toString()
+						+ " not found in the classpath");
 			}
 		}
+	}
+
+	protected static Properties getProperty() {
+		return property;
 	}
 
 	private AbstractDataType factoryDataTypeMethod(DataTypeEnum dataType) {
@@ -55,7 +61,7 @@ public class PropertyLoader {
 		case BOOLEAN:
 			abstractDataType = new BasicBooleanType();
 		default:
-			abstractDataType = new BasicBooleanType();
+			abstractDataType = new BasicStringType();
 			break;
 		}
 		return abstractDataType;

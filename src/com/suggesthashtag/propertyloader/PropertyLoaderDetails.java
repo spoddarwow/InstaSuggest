@@ -65,6 +65,7 @@ public class PropertyLoaderDetails {
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub
-		return this.propertyFilePath + this.propertyFileName;
+		return (null != this.propertyFilePath) ? this.propertyFilePath
+				+ this.propertyFileName : this.propertyFileName;
 	}
 }
