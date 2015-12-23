@@ -14,6 +14,7 @@ import com.suggesthashtag.propertyloader.datatype.BasicFloatType;
 import com.suggesthashtag.propertyloader.datatype.BasicIntegerType;
 import com.suggesthashtag.propertyloader.datatype.BasicStringType;
 import com.suggesthashtag.propertyloader.datatype.DataTypeEnum;
+import com.suggesthashtag.propertyloader.exception.PropertyException;
 
 /**
  * @author sumitpoddar
@@ -62,66 +63,74 @@ public class PropertyLoader {
 		return abstractDataType;
 	}
 
-	public int getInteger(String propertyKey) {
+	public int getInteger(String propertyKey) throws PropertyException , NumberFormatException{
 		@SuppressWarnings("unchecked")
 		AbstractDataType<Integer> basicIntType = factoryDataTypeMethod(DataTypeEnum.INTEGER);
-		return basicIntType.getValue(this.property.getProperty(propertyKey));
+		return basicIntType.
+				getValue(
+						this.property.getProperty(
+								propertyKey));
 	}
 
-	public int getInteger(String propertyKey, String defaultValue) {
+	public int getInteger(String propertyKey, String defaultValue)
+			throws PropertyException {
 		@SuppressWarnings("unchecked")
 		AbstractDataType<Integer> basicIntType = factoryDataTypeMethod(DataTypeEnum.INTEGER);
 		return basicIntType.getValue(this.property.getProperty(propertyKey,
 				defaultValue));
 	}
 
-	public double getDouble(String propertyKey) {
+	public double getDouble(String propertyKey) throws PropertyException {
 		@SuppressWarnings("unchecked")
 		AbstractDataType<Double> basicDoubleType = factoryDataTypeMethod(DataTypeEnum.DOUBLE);
 		return basicDoubleType.getValue(this.property.getProperty(propertyKey));
 	}
 
-	public double getDouble(String propertyKey, String defaultValue) {
+	public double getDouble(String propertyKey, String defaultValue)
+			throws PropertyException {
 		@SuppressWarnings("unchecked")
 		AbstractDataType<Double> basicDoubleType = factoryDataTypeMethod(DataTypeEnum.DOUBLE);
 		return basicDoubleType.getValue(this.property.getProperty(propertyKey,
 				defaultValue));
 	}
 
-	public float getFloat(String propertyKey) {
+	public float getFloat(String propertyKey) throws PropertyException {
 		@SuppressWarnings("unchecked")
 		AbstractDataType<Float> basicFloatType = factoryDataTypeMethod(DataTypeEnum.FLOAT);
 		return basicFloatType.getValue(this.property.getProperty(propertyKey));
 	}
 
-	public float getFloat(String propertyKey, String defaultValue) {
+	public float getFloat(String propertyKey, String defaultValue)
+			throws PropertyException {
 		@SuppressWarnings("unchecked")
 		AbstractDataType<Float> basicFloatType = factoryDataTypeMethod(DataTypeEnum.FLOAT);
 		return basicFloatType.getValue(this.property.getProperty(propertyKey,
 				defaultValue));
 	}
 
-	public boolean getBoolean(String propertyKey) {
+	public boolean getBoolean(String propertyKey) throws PropertyException {
 		@SuppressWarnings("unchecked")
 		AbstractDataType<Boolean> basicBooleanType = factoryDataTypeMethod(DataTypeEnum.BOOLEAN);
 		return basicBooleanType
 				.getValue(this.property.getProperty(propertyKey));
 	}
 
-	public boolean basicBooleanType(String propertyKey, String defaultValue) {
+	public boolean basicBooleanType(String propertyKey, String defaultValue)
+			throws PropertyException {
 		@SuppressWarnings("unchecked")
 		AbstractDataType<Boolean> basicBooleanType = factoryDataTypeMethod(DataTypeEnum.BOOLEAN);
 		return basicBooleanType.getValue(this.property.getProperty(propertyKey,
 				defaultValue));
 	}
 
-	public String getString(String propertyKey) {
+	public String getString(String propertyKey) throws PropertyException {
 		@SuppressWarnings("unchecked")
 		AbstractDataType<String> basicStringType = factoryDataTypeMethod(DataTypeEnum.STRING);
 		return basicStringType.getValue(this.property.getProperty(propertyKey));
 	}
 
-	public String getString(String propertyKey, String defaultValue) {
+	public String getString(String propertyKey, String defaultValue)
+			throws PropertyException {
 		@SuppressWarnings("unchecked")
 		AbstractDataType<String> basicStringType = factoryDataTypeMethod(DataTypeEnum.STRING);
 		return basicStringType.getValue(this.property.getProperty(propertyKey,

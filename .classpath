@@ -21,5 +21,6 @@
 	<classpathentry kind="lib" path="lib/httpclient-cache-4.5.1.jar"/>
 	<classpathentry kind="lib" path="lib/httpcore-4.4.4.jar"/>
 	<classpathentry kind="lib" path="lib/httpcore-nio-4.4.4.jar"/>
+	<classpathentry kind="lib" path="lib/log4j-1.2.17.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

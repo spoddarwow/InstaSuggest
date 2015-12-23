@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import com.suggesthashtag.propertyloader.PropertyLoader;
 import com.suggesthashtag.propertyloader.PropertyLoaderDetails;
+import com.suggesthashtag.propertyloader.exception.PropertyException;
 
 import junit.framework.TestCase;
 
@@ -17,16 +18,23 @@ import junit.framework.TestCase;
  *
  */
 public class TestPropertyLoader extends TestCase {
-	
+
 	@Test
-	public static void testJunitClass() throws IOException{
-		PropertyLoaderDetails propDetails = new PropertyLoaderDetails("demo.properties", null);
+	public static void testJunitClass() throws IOException {
+		PropertyLoaderDetails propDetails = new PropertyLoaderDetails(
+				"demo.properties", null);
 		PropertyLoader loader = new PropertyLoader();
 		loader.load(propDetails);
-		assertEquals("beta", loader.getString("alpha"));
-		assertEquals("/alpha/beta", loader.getString("url"));
-		assertEquals("/danmurphys//helloworld", loader.getString("newurl"));
-		assertEquals("/alpha/beta", loader.getString("url"));
+		try {
+			assertEquals("beta", loader.getString("alpha"));
+			//assertEquals(true, loader.getBoolean("int1"));
+			assertEquals("/alpha/beta", loader.getInteger("url"));
+			assertEquals("/danmurphys//helloworld", loader.getString("newurl"));
+			assertEquals("/alpha/beta", loader.getString("url"));
+		} catch (PropertyException exception) {
+			// TODO Auto-generated catch block
+			System.out.println("Hello");
+			exception.printStackTrace();
+		}
 	}
-
 }
