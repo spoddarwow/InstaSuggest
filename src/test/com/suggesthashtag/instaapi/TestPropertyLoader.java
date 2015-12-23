@@ -24,7 +24,9 @@ public class TestPropertyLoader extends TestCase {
 		PropertyLoader loader = new PropertyLoader();
 		loader.load(propDetails);
 		assertEquals("beta", loader.getString("alpha"));
-		assertEquals("/alpha/${alpha}", loader.getString("newUrl"));
+		assertEquals("/alpha/beta", loader.getString("url"));
+		assertEquals("/danmurphys//helloworld", loader.getString("newurl"));
+		assertEquals("/alpha/beta", loader.getString("url"));
 	}
 
 }

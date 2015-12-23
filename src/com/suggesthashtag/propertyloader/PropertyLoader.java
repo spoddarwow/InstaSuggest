@@ -6,7 +6,6 @@ package com.suggesthashtag.propertyloader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Properties;
 
 import com.suggesthashtag.propertyloader.datatype.AbstractDataType;
 import com.suggesthashtag.propertyloader.datatype.BasicBooleanType;
@@ -21,7 +20,7 @@ import com.suggesthashtag.propertyloader.datatype.DataTypeEnum;
  */
 public class PropertyLoader {
 
-	private static Properties property = new Properties();
+	private Property property = new Property();
 
 	public void load(PropertyLoaderDetails propFileDetails) throws IOException {
 		loadAllPropertyFile(propFileDetails);
@@ -33,17 +32,13 @@ public class PropertyLoader {
 			InputStream inputStream = PropertyLoader.class.getClassLoader()
 					.getResourceAsStream(propFileDetails.toString());
 			if (inputStream != null) {
-				property.load(inputStream);
+				this.property.load(inputStream);
 			} else {
 				throw new FileNotFoundException("property file "
 						+ propFileDetails.toString()
 						+ " not found in the classpath");
 			}
 		}
-	}
-
-	protected static Properties getProperty() {
-		return property;
 	}
 
 	private AbstractDataType factoryDataTypeMethod(DataTypeEnum dataType) {
@@ -121,11 +116,13 @@ public class PropertyLoader {
 	}
 
 	public String getString(String propertyKey) {
+		@SuppressWarnings("unchecked")
 		AbstractDataType<String> basicStringType = factoryDataTypeMethod(DataTypeEnum.STRING);
 		return basicStringType.getValue(this.property.getProperty(propertyKey));
 	}
 
 	public String getString(String propertyKey, String defaultValue) {
+		@SuppressWarnings("unchecked")
 		AbstractDataType<String> basicStringType = factoryDataTypeMethod(DataTypeEnum.STRING);
 		return basicStringType.getValue(this.property.getProperty(propertyKey,
 				defaultValue));

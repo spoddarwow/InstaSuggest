@@ -4,6 +4,7 @@
 package com.suggesthashtag.propertyloader;
 
 import java.util.Properties;
+import java.util.Stack;
 
 /**
  * @author sumitpoddar
@@ -23,16 +24,51 @@ public class PropertyFormatUtil {
 
 	public String formatPropertyValue(String propertyValue,
 			Properties properties) {
-		Properties property = PropertyLoader.getProperty();
-		if (property == null) {
+		boolean dynamicPropValOn = false;
+		if (properties == null) {
 			// TODO: Throw exception to load property first.
 		}
+		String propertyValueToRet = propertyValue;
+		StringBuffer formattedPropertyValue = new StringBuffer();
+		if (propertyValue != null && !"".equals(propertyValue)
+				&& propertyValue.contains("${")) {
+			char[] propertyValueChars = propertyValue.toCharArray();
+			int charIndex = 0;
+			StringBuffer dynamicPropValueKey = new StringBuffer();
+			while (charIndex < propertyValueChars.length) {
+				if (propertyValueChars[charIndex] == '$'
+						&& propertyValueChars[charIndex + 1] == '{') {
 
-		if (property.contains("${")) {
-			Stack
+					if (dynamicPropValOn) {
+						// Throw Exception
+					} else {
+						dynamicPropValOn = true;
+						charIndex++;
+					}
+				} else if (propertyValueChars[charIndex] == '}') {
+					if (dynamicPropValOn) {
+						dynamicPropValOn = false;
+						formattedPropertyValue.append(formatPropertyValue(
+								properties.getProperty(dynamicPropValueKey
+										.toString()), properties));
+						dynamicPropValueKey = new StringBuffer();
+					} else {
+						formattedPropertyValue
+								.append(propertyValueChars[charIndex]);
+					}
+
+				} else if (dynamicPropValOn) {
+					dynamicPropValueKey.append(propertyValueChars[charIndex]);
+				} else if (!dynamicPropValOn) {
+					formattedPropertyValue
+							.append(propertyValueChars[charIndex]);
+				}
+				charIndex++;
+			}
+			propertyValueToRet = formattedPropertyValue.toString();
 		}
 
-		return propertyValue;
+		return propertyValueToRet;
 
 	}
 }
