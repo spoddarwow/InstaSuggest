@@ -1,0 +1,29 @@
+/**
+ * 
+ */
+package com.suggesthashtag.logger.events;
+
+import org.apache.log4j.Logger;
+
+import com.suggesthashtag.logger.BasicLogObject;
+import com.suggesthashtag.logger.LoggerConstant;
+
+/**
+ * @author sumitpoddar
+ *
+ */
+public abstract class AbstractLoggerEvents {
+
+	protected Logger getLogger() {
+		return Logger.getLogger(LoggerConstant.MAIN_LOGGER_NAME);
+	}
+
+	public abstract void log(String message);
+
+	public abstract void log(String message, Throwable throwObject);
+
+	public abstract void log(Class<? extends BasicLogObject> messageObject);
+
+	public abstract void log(Class<? extends BasicLogObject> messageObject,
+			Throwable throwObject);
+}
