@@ -1,38 +1,26 @@
 package com.suggesthashtag.instaapi.mediapopular;
 
+import java.util.List;
+
 import com.suggesthashtag.instaapi.framework.AbstractInstaApiHandler;
 import com.suggesthashtag.instaapi.framework.annotation.ApiBatchAnnotaion;
+import com.suggesthashtag.propertyloader.PropertyLoaderDetails;
 
 @ApiBatchAnnotaion(requiredCommandLineArgs = { "environment" })
 public class SHTMediaPopularRequestHandler extends AbstractInstaApiHandler {
 
-	
+	/**
+	 * @param batchName
+	 */
+	public SHTMediaPopularRequestHandler(String batchName) {
+		super(batchName);
+		// TODO Auto-generated constructor stub
+	}
+
 	public static void main(String[] args) {
-		process(SHTMediaPopularRequestHandler.class, args);
+		new SHTMediaPopularRequestHandler("SHTMediaPopularRequestHandler")
+				.process(SHTMediaPopularRequestHandler.class, args);
 	}
-
-	@Override
-	public String getLoggerFileName() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String getLoggerFilePath() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String getPropsFileName() {
-		return "media_popular_";
-	}
-
-	@Override
-	public String getPropsFilePath() {
-		return "";
-	}
-
 
 	/*
 	 * (non-Javadoc)
@@ -42,8 +30,42 @@ public class SHTMediaPopularRequestHandler extends AbstractInstaApiHandler {
 	 */
 	@Override
 	public void execute() {
-		// TODO Auto-generated method stub
 
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.suggesthashtag.instaapi.framework.AbstractInstaApiHandler#
+	 * loadMainPropertyFile()
+	 */
+	@Override
+	public boolean loadMainPropertyFile() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.suggesthashtag.instaapi.framework.AbstractInstaApiHandler#
+	 * getPropertyLoadDetails()
+	 */
+	@Override
+	public PropertyLoaderDetails getPropertyLoadDetails() {
+		return new PropertyLoaderDetails("mediaPopular.properties", true);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.suggesthashtag.instaapi.framework.AbstractInstaApiHandler#
+	 * getPropertyLoadDetailsList()
+	 */
+	@Override
+	public List<PropertyLoaderDetails> getPropertyLoadDetailsList() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

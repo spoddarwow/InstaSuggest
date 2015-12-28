@@ -21,6 +21,7 @@ public class CommandLineArguments {
 			int index = 0;
 			while (index < args.length) {
 				commandLineArgs.put(args[index], args[index + 1]);
+				System.setProperty(args[index], args[index + 1]);
 				index += 2;
 			}
 		}

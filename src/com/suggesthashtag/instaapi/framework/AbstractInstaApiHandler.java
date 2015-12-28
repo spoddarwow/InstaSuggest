@@ -1,9 +1,13 @@
 package com.suggesthashtag.instaapi.framework;
 
-import org.apache.log4j.Logger;
+import java.util.ArrayList;
+import java.util.List;
 
-import com.suggesthashtag.instaapi.SHTConstants;
+import com.suggesthashtag.logger.BatchLogManager;
+import com.suggesthashtag.logger.exception.LoggerException;
 import com.suggesthashtag.propertyloader.PropertyLoader;
+import com.suggesthashtag.propertyloader.PropertyLoaderDetails;
+import com.suggesthashtag.propertyloader.exception.PropertyException;
 
 /**
  * Abstract class used for all the Instagram API's
@@ -11,55 +15,78 @@ import com.suggesthashtag.propertyloader.PropertyLoader;
  * @author sumitpoddar
  *
  */
-public abstract class AbstractInstaApiHandler {
+public abstract class AbstractInstaApiHandler extends BatchLogManager {
+
+	/**
+	 * @param batchName
+	 */
+	public AbstractInstaApiHandler(String batchName) {
+		super(batchName);
+		// TODO Auto-generated constructor stub
+	}
 
 	private PropertyLoader propertyLoader = new PropertyLoader();
-	private static Logger logger = null;
+	private CommandLineArguments commandLinesArgs = null;
 
-	protected static void process(
-			Class<? extends AbstractInstaApiHandler> callerClass, String[] args) {
-		logger = Logger.getLogger(AbstractInstaApiHandler.class);
-
-		// Init default Logger object;
-		// Init Command Line object
-		// Load property files
-		// Cal execute method.
-
+	public void process(Class<? extends AbstractInstaApiHandler> callerClass,
+			String[] args) {
+		try {
+			System.out.println("----- Starting with the batch process : "
+					+ callerClass.getName());
+			System.out.println("Loading Command Line arguments");
+			commandLinesArgs = new CommandLineArguments(args);
+			System.out
+					.println("Command Line arguments loaded. Starting with loading properties file(s)");
+			loadPropertyFile();
+			init();
+			log("Properties file(s) loaded. Starting with execution of the process.");
+			execute();
+			log("Execution complete.");
+		} catch (PropertyException exception) {
+			// TODO Auto-generated catch block
+			exception.printStackTrace();
+			System.exit(1);
+		} catch (LoggerException exception) {
+			// TODO Auto-generated catch block
+			exception.printStackTrace();
+		}
+		log("Batch process for " + callerClass.getName()
+				+ " is finished successfully.");
 	}
 
-	private String returnBuildedPropertyName(String environmentName) {
-		StringBuffer propsNameBuf = new StringBuffer(
-				(null != getPropsFileName() && !"".equals(getPropsFileName())) ? getPropsFileName()
-						: "");
-		propsNameBuf.append(environmentName).append(".property");
-		return propsNameBuf.toString();
+	public CommandLineArguments getCommandLineArgs() {
+		return this.commandLinesArgs;
 	}
 
-	private String returnBuildedPropertyPath() {
-		return (null != getPropsFilePath() && !"".equals(getPropsFilePath())) ? getPropsFilePath()
-				: SHTConstants.defaultPropertyPath;
+	protected void loadPropertyFile() throws PropertyException {
+		if (loadMainPropertyFile()) {
+			List<PropertyLoaderDetails> tempList = new ArrayList<PropertyLoaderDetails>();
+			tempList.add(new PropertyLoaderDetails("batchMain.properties",
+					false));
+			if (getPropertyLoadDetailsList() != null
+					&& getPropertyLoadDetailsList().size() > 0) {
+				tempList.addAll(getPropertyLoadDetailsList());
+				propertyLoader.load(tempList);
+			} else {
+				tempList.add(getPropertyLoadDetails());
+				propertyLoader.load(getPropertyLoadDetails());
+			}
+		} else {
+			if (getPropertyLoadDetailsList() != null
+					&& getPropertyLoadDetailsList().size() > 0) {
+				propertyLoader.load(getPropertyLoadDetailsList());
+			} else {
+				propertyLoader.load(getPropertyLoadDetails());
+			}
+		}
+
 	}
 
 	public abstract void execute();
 
-	/**
-	 * @return String - batch log file name.
-	 */
-	public abstract String getLoggerFileName();
+	public abstract boolean loadMainPropertyFile();
 
-	/**
-	 * @return String - batch log file path.
-	 */
-	public abstract String getLoggerFilePath();
+	public abstract PropertyLoaderDetails getPropertyLoadDetails();
 
-	/**
-	 * @return String - batch property file name.
-	 */
-	public abstract String getPropsFileName();
-
-	/**
-	 * @return String - batch property file path.
-	 */
-	public abstract String getPropsFilePath();
-
+	public abstract List<PropertyLoaderDetails> getPropertyLoadDetailsList();
 }

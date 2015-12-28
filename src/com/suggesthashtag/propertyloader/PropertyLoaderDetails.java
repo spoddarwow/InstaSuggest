@@ -13,6 +13,15 @@ public class PropertyLoaderDetails {
 
 	private String propertyFileName = "";
 	private String propertyFilePath = "";
+	private boolean loadPropPerEnv = false;
+
+	/**
+	 * @param propertyFileName
+	 * @param propertyFilePath
+	 */
+	public PropertyLoaderDetails(String propertyFileName) {
+		setPropertyFileName(propertyFileName);
+	}
 
 	/**
 	 * @param propertyFileName
@@ -20,9 +29,28 @@ public class PropertyLoaderDetails {
 	 */
 	public PropertyLoaderDetails(String propertyFileName,
 			String propertyFilePath) {
-		super();
-		this.propertyFileName = propertyFileName;
-		this.propertyFilePath = propertyFilePath;
+		setPropertyFileName(propertyFileName);
+		setPropertyFilePath(propertyFilePath);
+	}
+
+	/**
+	 * @param propertyFileName
+	 * @param propertyFilePath
+	 */
+	public PropertyLoaderDetails(String propertyFileName, boolean loadPropPerEnv) {
+		this.loadPropPerEnv = loadPropPerEnv;
+		setPropertyFileName(propertyFileName);
+	}
+
+	/**
+	 * @param propertyFileName
+	 * @param propertyFilePath
+	 */
+	public PropertyLoaderDetails(String propertyFileName,
+			String propertyFilePath, boolean loadPropPerEnv) {
+		this.loadPropPerEnv = loadPropPerEnv;
+		setPropertyFileName(propertyFileName);
+		setPropertyFilePath(propertyFilePath);
 	}
 
 	public String getPropertyFileName() {
@@ -36,6 +64,18 @@ public class PropertyLoaderDetails {
 			} else if (propertyFileName.startsWith("//")) {
 				propertyFileName = propertyFileName.substring(2);
 			}
+			if (this.loadPropPerEnv) {
+				if (propertyFileName.endsWith(".properties")) {
+					propertyFileName = (String) propertyFileName.subSequence(0,
+							propertyFileName.lastIndexOf(".properties"));
+				}
+				propertyFileName += System.getProperty("environment", "");
+
+			}
+			if (!propertyFileName.endsWith(".properties")) {
+				propertyFileName += ".properties";
+			}
+
 		}
 		this.propertyFileName = propertyFileName;
 	}

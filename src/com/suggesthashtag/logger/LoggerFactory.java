@@ -27,27 +27,29 @@ public class LoggerFactory {
 		return MY_INSTANCE;
 	}
 
-	protected AbstractLoggerEvents getLoggerEventHandler(LoggerLevel loggerLevel) {
-		AbstractLoggerEvents loggerEventHandler = new LogEventInfoHandler();
+	protected AbstractLoggerEvents getLoggerEventHandler(String loggerName,
+			LoggerLevel loggerLevel) {
+		AbstractLoggerEvents loggerEventHandler = new LogEventInfoHandler(
+				loggerName);
 		if (loggerLevel != null) {
 			switch (loggerLevel) {
 			case INFO:
 				// Already initialized above.
 				break;
 			case ERROR:
-				loggerEventHandler = new LogEventErrorHandler();
+				loggerEventHandler = new LogEventErrorHandler(loggerName);
 				break;
 			case TRACE:
-				loggerEventHandler = new LogEventTraceHandler();
+				loggerEventHandler = new LogEventTraceHandler(loggerName);
 				break;
 			case FATAL:
-				loggerEventHandler = new LogEventFatalHandler();
+				loggerEventHandler = new LogEventFatalHandler(loggerName);
 				break;
 			case WARN:
-				loggerEventHandler = new LogEventWarnHandler();
+				loggerEventHandler = new LogEventWarnHandler(loggerName);
 				break;
 			case DEBUG:
-				loggerEventHandler = new LogEventDebugHandler();
+				loggerEventHandler = new LogEventDebugHandler(loggerName);
 				break;
 			default:
 				// Already initialized above.

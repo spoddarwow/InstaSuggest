@@ -13,6 +13,15 @@ import com.suggesthashtag.logger.BasicLogObject;
  */
 public class LogEventInfoHandler extends AbstractLoggerEvents {
 
+	private String loggerName = "";
+
+	/**
+	 * 
+	 */
+	public LogEventInfoHandler(String loggerName) {
+		this.loggerName = loggerName;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -23,7 +32,7 @@ public class LogEventInfoHandler extends AbstractLoggerEvents {
 	@Override
 	public void log(String message) {
 		// TODO Auto-generated method stub
-		Logger logger = getLogger();
+		Logger logger = getLogger(loggerName);
 		if (logger.isInfoEnabled()) {
 			logger.info(message);
 		}
@@ -39,7 +48,7 @@ public class LogEventInfoHandler extends AbstractLoggerEvents {
 	@Override
 	public void log(String message, Throwable throwObject) {
 		// TODO Auto-generated method stub
-		Logger logger = getLogger();
+		Logger logger = getLogger(loggerName);
 		if (logger.isInfoEnabled()) {
 			logger.info(message, throwObject);
 		}
@@ -55,7 +64,7 @@ public class LogEventInfoHandler extends AbstractLoggerEvents {
 	@Override
 	public void log(Class<? extends BasicLogObject> messageObject) {
 		// TODO Auto-generated method stub
-		Logger logger = getLogger();
+		Logger logger = getLogger(loggerName);
 		if (logger.isInfoEnabled()) {
 			logger.info(messageObject);
 		}
@@ -72,7 +81,7 @@ public class LogEventInfoHandler extends AbstractLoggerEvents {
 	public void log(Class<? extends BasicLogObject> messageObject,
 			Throwable throwObject) {
 		// TODO Auto-generated method stub
-		Logger logger = getLogger();
+		Logger logger = getLogger(loggerName);
 		if (logger.isInfoEnabled()) {
 			logger.info(messageObject, throwObject);
 		}

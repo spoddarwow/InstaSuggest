@@ -4,6 +4,10 @@
 package com.suggesthashtag.logger;
 
 import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
+
+import com.suggesthashtag.logger.exception.LoggerException;
+import com.suggesthashtag.propertyloader.PropertyLoader;
 
 /**
  * Singleton class for managing logs. Improvements to do:
@@ -16,12 +20,19 @@ import org.apache.log4j.Logger;
  * @author sumitpoddar
  *
  */
-public class LogManager {
+public class LogManager extends PropertyLoader {
 
-	private static LogManager MY_INSTANCE = new LogManager();
+	protected static String batchName = LoggerConstant.MAIN_LOGGER_NAME;
 
-	public static LogManager getInstance() {
-		return MY_INSTANCE;
+	private LogManager() {
+	}
+
+	/**
+	 * @param batchName
+	 */
+	public LogManager(String batchName) {
+		this.batchName = batchName;
+
 	}
 
 	// TODO: logger pool implementation.
@@ -31,49 +42,60 @@ public class LogManager {
 	 * int maxLogger = LoggerConstant.DEF_LOGGER_OBJ_COUNT;
 	 */
 
-	private LogManager() {
-		init();
-	}
-
 	/**
 	 * To be implemented as improvement.
 	 */
-	private void init() {
-		Logger logger = Logger.getLogger(LoggerConstant.MAIN_LOGGER_NAME);
-		logger.info("------ Logger is ready! ------");
+	public void init() throws LoggerException {
+		if (batchName == null || "".equals(batchName)) {
+			throw new LoggerException(
+					"BatchName cannot be null/empty. It is used for logger reference.");
+		}
+		Logger logger = Logger.getLogger(batchName);
+		PropertyConfigurator.configure(getProperty().getProperties());
+		log("---- Logger object (" + batchName + ") is ready.");
 	}
 
-	public void log(String message) {
+	public static void log(String message) {
 		log(LoggerLevel.INFO, message);
 	}
 
-	public void log(LoggerLevel level, String message) {
-		LoggerFactory.getInstance().getLoggerEventHandler(level).log(message);
+	public static void log(LoggerLevel level, String message) {
+		LoggerFactory.getInstance()
+				.getLoggerEventHandler(getLoggerName(), level).log(message);
 	}
 
-	public void log(String message, Throwable throwObject) {
+	public static void log(String message, Throwable throwObject) {
 		log(LoggerLevel.INFO, message, throwObject);
 	}
 
-	public void log(LoggerLevel level, String message, Throwable throwObject) {
-		LoggerFactory.getInstance().getLoggerEventHandler(level).log(message);
+	public static void log(LoggerLevel level, String message,
+			Throwable throwObject) {
+		LoggerFactory.getInstance()
+				.getLoggerEventHandler(getLoggerName(), level).log(message);
 	}
 
-	public void log(Class<? extends BasicLogObject> message) {
+	public static void log(Class<? extends BasicLogObject> message) {
 		log(LoggerLevel.INFO, message);
 	}
 
-	public void log(LoggerLevel level, Class<? extends BasicLogObject> message) {
-		LoggerFactory.getInstance().getLoggerEventHandler(level).log(message);
+	public static void log(LoggerLevel level,
+			Class<? extends BasicLogObject> message) {
+		LoggerFactory.getInstance()
+				.getLoggerEventHandler(getLoggerName(), level).log(message);
 	}
 
-	public void log(Class<? extends BasicLogObject> message,
+	public static void log(Class<? extends BasicLogObject> message,
 			Throwable throwObject) {
 		log(LoggerLevel.INFO, message, throwObject);
 	}
 
-	public void log(LoggerLevel level, Class<? extends BasicLogObject> message,
-			Throwable throwObject) {
-		LoggerFactory.getInstance().getLoggerEventHandler(level).log(message);
+	public static void log(LoggerLevel level,
+			Class<? extends BasicLogObject> message, Throwable throwObject) {
+		LoggerFactory.getInstance()
+				.getLoggerEventHandler(getLoggerName(), level).log(message);
+	}
+
+	public static String getLoggerName() {
+		return batchName;
 	}
 }

@@ -13,6 +13,15 @@ import com.suggesthashtag.logger.BasicLogObject;
  */
 public class LogEventTraceHandler extends AbstractLoggerEvents {
 
+	private String loggerName = "";
+
+	/**
+	 * 
+	 */
+	public LogEventTraceHandler(String loggerName) {
+		this.loggerName = loggerName;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -23,7 +32,7 @@ public class LogEventTraceHandler extends AbstractLoggerEvents {
 	@Override
 	public void log(String message) {
 		// TODO Auto-generated method stub
-		Logger logger = getLogger();
+		Logger logger = getLogger(loggerName);
 		if (logger.isTraceEnabled()) {
 			logger.trace(message);
 		}
@@ -39,7 +48,7 @@ public class LogEventTraceHandler extends AbstractLoggerEvents {
 	@Override
 	public void log(String message, Throwable throwObject) {
 		// TODO Auto-generated method stub
-		Logger logger = getLogger();
+		Logger logger = getLogger(loggerName);
 		if (logger.isTraceEnabled()) {
 			logger.trace(message, throwObject);
 		}
@@ -55,7 +64,7 @@ public class LogEventTraceHandler extends AbstractLoggerEvents {
 	@Override
 	public void log(Class<? extends BasicLogObject> messageObject) {
 		// TODO Auto-generated method stub
-		Logger logger = getLogger();
+		Logger logger = getLogger(loggerName);
 		if (logger.isTraceEnabled()) {
 			logger.trace(messageObject);
 		}
@@ -72,7 +81,7 @@ public class LogEventTraceHandler extends AbstractLoggerEvents {
 	public void log(Class<? extends BasicLogObject> messageObject,
 			Throwable throwObject) {
 		// TODO Auto-generated method stub
-		Logger logger = getLogger();
+		Logger logger = getLogger(loggerName);
 		if (logger.isTraceEnabled()) {
 			logger.trace(messageObject, throwObject);
 		}

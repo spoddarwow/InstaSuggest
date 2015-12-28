@@ -6,6 +6,8 @@ package com.suggesthashtag.propertyloader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.suggesthashtag.propertyloader.datatype.AbstractDataType;
 import com.suggesthashtag.propertyloader.datatype.BasicBooleanType;
@@ -23,23 +25,36 @@ public class PropertyLoader {
 
 	private Property property = new Property();
 
-	public void load(PropertyLoaderDetails propFileDetails) throws IOException {
-		loadAllPropertyFile(propFileDetails);
+	public void load(PropertyLoaderDetails propFileDetails)
+			throws PropertyException {
+		ArrayList<PropertyLoaderDetails> list = new ArrayList<PropertyLoaderDetails>();
+		list.add(propFileDetails);
+		load(list);
 	}
 
-	public void loadAllPropertyFile(PropertyLoaderDetails... propFileDetailList)
-			throws IOException {
-		for (PropertyLoaderDetails propFileDetails : propFileDetailList) {
-			InputStream inputStream = PropertyLoader.class.getClassLoader()
-					.getResourceAsStream(propFileDetails.toString());
-			if (inputStream != null) {
-				this.property.load(inputStream);
-			} else {
-				throw new FileNotFoundException("property file "
-						+ propFileDetails.toString()
-						+ " not found in the classpath");
+	public void load(List<PropertyLoaderDetails> propFileDetailList)
+			throws PropertyException {
+		try {
+			for (PropertyLoaderDetails propFileDetails : propFileDetailList) {
+				InputStream inputStream = PropertyLoader.class.getClassLoader()
+						.getResourceAsStream(propFileDetails.toString());
+				if (inputStream != null) {
+					this.property.load(inputStream);
+				} else {
+					throw new FileNotFoundException("Property file "
+							+ propFileDetails.toString()
+							+ " not found in the classpath");
+				}
 			}
+		} catch (FileNotFoundException exception) {
+			throw new PropertyException(exception);
+		} catch (IOException exception) {
+			throw new PropertyException(exception);
 		}
+	}
+
+	protected Property getProperty() {
+		return this.property;
 	}
 
 	private AbstractDataType factoryDataTypeMethod(DataTypeEnum dataType) {
@@ -63,13 +78,11 @@ public class PropertyLoader {
 		return abstractDataType;
 	}
 
-	public int getInteger(String propertyKey) throws PropertyException , NumberFormatException{
+	public int getInteger(String propertyKey) throws PropertyException,
+			NumberFormatException {
 		@SuppressWarnings("unchecked")
 		AbstractDataType<Integer> basicIntType = factoryDataTypeMethod(DataTypeEnum.INTEGER);
-		return basicIntType.
-				getValue(
-						this.property.getProperty(
-								propertyKey));
+		return basicIntType.getValue(this.property.getProperty(propertyKey));
 	}
 
 	public int getInteger(String propertyKey, String defaultValue)

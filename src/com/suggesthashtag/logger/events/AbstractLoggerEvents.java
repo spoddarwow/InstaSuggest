@@ -14,8 +14,8 @@ import com.suggesthashtag.logger.LoggerConstant;
  */
 public abstract class AbstractLoggerEvents {
 
-	protected Logger getLogger() {
-		return Logger.getLogger(LoggerConstant.MAIN_LOGGER_NAME);
+	protected Logger getLogger(String loggerName) {
+		return Logger.getLogger(loggerName);
 	}
 
 	public abstract void log(String message);

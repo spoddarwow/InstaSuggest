@@ -11,6 +11,15 @@ import com.suggesthashtag.logger.BasicLogObject;
  */
 public class LogEventErrorHandler extends AbstractLoggerEvents {
 
+	private String loggerName = "";
+
+	/**
+	 * 
+	 */
+	public LogEventErrorHandler(String loggerName) {
+		this.loggerName = loggerName;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -21,7 +30,7 @@ public class LogEventErrorHandler extends AbstractLoggerEvents {
 	@Override
 	public void log(String message) {
 		// TODO Auto-generated method stub
-		getLogger().error(message);
+		getLogger(loggerName).error(message);
 	}
 
 	/*
@@ -34,7 +43,7 @@ public class LogEventErrorHandler extends AbstractLoggerEvents {
 	@Override
 	public void log(String message, Throwable throwObject) {
 		// TODO Auto-generated method stub
-		getLogger().error(message, throwObject);
+		getLogger(loggerName).error(message, throwObject);
 	}
 
 	/*
@@ -47,7 +56,7 @@ public class LogEventErrorHandler extends AbstractLoggerEvents {
 	@Override
 	public void log(Class<? extends BasicLogObject> messageObject) {
 		// TODO Auto-generated method stub
-		getLogger().error(messageObject);
+		getLogger(loggerName).error(messageObject);
 	}
 
 	/*
@@ -61,7 +70,7 @@ public class LogEventErrorHandler extends AbstractLoggerEvents {
 	public void log(Class<? extends BasicLogObject> messageObject,
 			Throwable throwObject) {
 		// TODO Auto-generated method stub
-		getLogger().error(messageObject, throwObject);
+		getLogger(loggerName).error(messageObject, throwObject);
 	}
 
 }

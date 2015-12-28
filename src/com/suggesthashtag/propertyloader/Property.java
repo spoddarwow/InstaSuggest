@@ -45,4 +45,8 @@ public class Property extends Properties {
 		}
 		return propValue;
 	}
+
+	public Properties getProperties() {
+		return this.properties;
+	}
 }
