@@ -3,6 +3,8 @@
  */
 package com.suggesthashtag.logger;
 
+import java.util.Properties;
+
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
@@ -20,20 +22,7 @@ import com.suggesthashtag.propertyloader.PropertyLoader;
  * @author sumitpoddar
  *
  */
-public class LogManager extends PropertyLoader {
-
-	protected static String batchName = LoggerConstant.MAIN_LOGGER_NAME;
-
-	private LogManager() {
-	}
-
-	/**
-	 * @param batchName
-	 */
-	public LogManager(String batchName) {
-		this.batchName = batchName;
-
-	}
+public class LogManager {
 
 	// TODO: logger pool implementation.
 	/*
@@ -45,14 +34,15 @@ public class LogManager extends PropertyLoader {
 	/**
 	 * To be implemented as improvement.
 	 */
-	public void init() throws LoggerException {
+	public static void initLogger(String batchName, Properties properties)
+			throws LoggerException {
 		if (batchName == null || "".equals(batchName)) {
 			throw new LoggerException(
 					"BatchName cannot be null/empty. It is used for logger reference.");
 		}
 		Logger logger = Logger.getLogger(batchName);
-		PropertyConfigurator.configure(getProperty().getProperties());
-		log("---- Logger object (" + batchName + ") is ready.");
+		PropertyConfigurator.configure(properties);
+		log("---- Logger object (" + batchName + ") is ready. ----");
 	}
 
 	public static void log(String message) {
@@ -96,6 +86,6 @@ public class LogManager extends PropertyLoader {
 	}
 
 	public static String getLoggerName() {
-		return batchName;
+		return "SHTMediaPopularRequestHandler";
 	}
 }

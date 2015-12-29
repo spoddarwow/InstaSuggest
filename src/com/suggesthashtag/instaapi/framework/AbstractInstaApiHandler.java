@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.suggesthashtag.logger.BatchLogManager;
+import com.suggesthashtag.logger.LogManager;
 import com.suggesthashtag.logger.exception.LoggerException;
 import com.suggesthashtag.propertyloader.PropertyLoader;
 import com.suggesthashtag.propertyloader.PropertyLoaderDetails;
@@ -15,13 +16,15 @@ import com.suggesthashtag.propertyloader.exception.PropertyException;
  * @author sumitpoddar
  *
  */
-public abstract class AbstractInstaApiHandler extends BatchLogManager {
+public abstract class AbstractInstaApiHandler {
+
+	private static String batchName = "";
 
 	/**
 	 * @param batchName
 	 */
 	public AbstractInstaApiHandler(String batchName) {
-		super(batchName);
+		this.batchName = batchName;
 		// TODO Auto-generated constructor stub
 	}
 
@@ -38,10 +41,12 @@ public abstract class AbstractInstaApiHandler extends BatchLogManager {
 			System.out
 					.println("Command Line arguments loaded. Starting with loading properties file(s)");
 			loadPropertyFile();
-			init();
-			log("Properties file(s) loaded. Starting with execution of the process.");
+			LogManager.initLogger(batchName, propertyLoader.getProperty()
+					.getProperties());
+			LogManager
+					.log("Properties file(s) loaded. Starting with execution of the process.");
 			execute();
-			log("Execution complete.");
+			LogManager.log("Execution complete.");
 		} catch (PropertyException exception) {
 			// TODO Auto-generated catch block
 			exception.printStackTrace();
@@ -50,8 +55,12 @@ public abstract class AbstractInstaApiHandler extends BatchLogManager {
 			// TODO Auto-generated catch block
 			exception.printStackTrace();
 		}
-		log("Batch process for " + callerClass.getName()
+		LogManager.log("Batch process for " + callerClass.getName()
 				+ " is finished successfully.");
+	}
+
+	public PropertyLoader getPropertyLoader() {
+		return this.propertyLoader;
 	}
 
 	public CommandLineArguments getCommandLineArgs() {
@@ -69,7 +78,7 @@ public abstract class AbstractInstaApiHandler extends BatchLogManager {
 				propertyLoader.load(tempList);
 			} else {
 				tempList.add(getPropertyLoadDetails());
-				propertyLoader.load(getPropertyLoadDetails());
+				propertyLoader.load(tempList);
 			}
 		} else {
 			if (getPropertyLoadDetailsList() != null

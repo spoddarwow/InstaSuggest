@@ -53,7 +53,7 @@ public class PropertyLoader {
 		}
 	}
 
-	protected Property getProperty() {
+	public Property getProperty() {
 		return this.property;
 	}
 
