@@ -3,6 +3,10 @@
  */
 package com.suggesthashtag.logger;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Properties;
+
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
@@ -20,9 +24,9 @@ import com.suggesthashtag.propertyloader.PropertyLoader;
  * @author sumitpoddar
  *
  */
-public class LogManager extends PropertyLoader {
+public abstract class LogManager {
 
-	protected static String batchName = LoggerConstant.MAIN_LOGGER_NAME;
+	protected static String batchName = "";
 
 	private LogManager() {
 	}
@@ -45,57 +49,74 @@ public class LogManager extends PropertyLoader {
 	/**
 	 * To be implemented as improvement.
 	 */
-	public void init() throws LoggerException {
+	public void init(Properties loggerPropertyConf) throws LoggerException {
 		if (batchName == null || "".equals(batchName)) {
 			throw new LoggerException(
 					"BatchName cannot be null/empty. It is used for logger reference.");
 		}
 		Logger logger = Logger.getLogger(batchName);
-		PropertyConfigurator.configure(getProperty().getProperties());
+		if (loggerPropertyConf.getProperty("log.filename").contains("{")
+				&& loggerPropertyConf.getProperty("log.filename").contains("}")) {
+			Calendar cal = Calendar.getInstance();
+			String formatLoggerFileName = formatLoggerFileName(loggerPropertyConf
+					.getProperty("log.filename"));
+
+			SimpleDateFormat dateFormat = new SimpleDateFormat(
+					"dd/MMM/yyyy_HH:mm:ss");
+			System.out.println(dateFormat.format(cal.getTime()));
+			loggerPropertyConf.setProperty("log.filename", "");
+		}
+		PropertyConfigurator.configure(loggerPropertyConf);
 		log("---- Logger object (" + batchName + ") is ready.");
 	}
 
-	public static void log(String message) {
+	/**
+	 * @param property
+	 * @return
+	 */
+	private String formatLoggerFileName(String loggerFileName) {
+		String newLoggerFileName = loggerFileName;
+		
+		return newLoggerFileName;
+	}
+
+	public void log(String message) {
 		log(LoggerLevel.INFO, message);
 	}
 
-	public static void log(LoggerLevel level, String message) {
+	public void log(LoggerLevel level, String message) {
 		LoggerFactory.getInstance()
 				.getLoggerEventHandler(getLoggerName(), level).log(message);
 	}
 
-	public static void log(String message, Throwable throwObject) {
+	public void log(String message, Throwable throwObject) {
 		log(LoggerLevel.INFO, message, throwObject);
 	}
 
-	public static void log(LoggerLevel level, String message,
+	public void log(LoggerLevel level, String message, Throwable throwObject) {
+		LoggerFactory.getInstance()
+				.getLoggerEventHandler(getLoggerName(), level).log(message);
+	}
+
+	public void log(Class<? extends BasicLogObject> message) {
+		log(LoggerLevel.INFO, message);
+	}
+
+	public void log(LoggerLevel level, Class<? extends BasicLogObject> message) {
+		LoggerFactory.getInstance()
+				.getLoggerEventHandler(getLoggerName(), level).log(message);
+	}
+
+	public void log(Class<? extends BasicLogObject> message,
+			Throwable throwObject) {
+		log(LoggerLevel.INFO, message, throwObject);
+	}
+
+	public void log(LoggerLevel level, Class<? extends BasicLogObject> message,
 			Throwable throwObject) {
 		LoggerFactory.getInstance()
 				.getLoggerEventHandler(getLoggerName(), level).log(message);
 	}
 
-	public static void log(Class<? extends BasicLogObject> message) {
-		log(LoggerLevel.INFO, message);
-	}
-
-	public static void log(LoggerLevel level,
-			Class<? extends BasicLogObject> message) {
-		LoggerFactory.getInstance()
-				.getLoggerEventHandler(getLoggerName(), level).log(message);
-	}
-
-	public static void log(Class<? extends BasicLogObject> message,
-			Throwable throwObject) {
-		log(LoggerLevel.INFO, message, throwObject);
-	}
-
-	public static void log(LoggerLevel level,
-			Class<? extends BasicLogObject> message, Throwable throwObject) {
-		LoggerFactory.getInstance()
-				.getLoggerEventHandler(getLoggerName(), level).log(message);
-	}
-
-	public static String getLoggerName() {
-		return batchName;
-	}
+	public abstract String getLoggerName();
 }

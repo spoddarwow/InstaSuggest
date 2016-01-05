@@ -17,4 +17,13 @@ public class BatchLogManager extends LogManager {
 		// TODO Auto-generated constructor stub
 	}
 
+	/* (non-Javadoc)
+	 * @see com.suggesthashtag.logger.LogManager#getLoggerName()
+	 */
+	@Override
+	public String getLoggerName() {
+		// TODO Auto-generated method stub
+		return super.batchName;
+	}
+
 }

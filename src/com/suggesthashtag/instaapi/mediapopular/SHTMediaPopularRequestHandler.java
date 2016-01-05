@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.suggesthashtag.instaapi.framework.AbstractInstaApiHandler;
 import com.suggesthashtag.instaapi.framework.annotation.ApiBatchAnnotaion;
+import com.suggesthashtag.logger.BatchLogManager;
 import com.suggesthashtag.propertyloader.PropertyLoaderDetails;
 
 @ApiBatchAnnotaion(requiredCommandLineArgs = { "environment" })
@@ -30,7 +31,7 @@ public class SHTMediaPopularRequestHandler extends AbstractInstaApiHandler {
 	 */
 	@Override
 	public void execute() {
-
+		log("Hello World!!!");
 	}
 
 	/*

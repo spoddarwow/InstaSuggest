@@ -38,7 +38,7 @@ public abstract class AbstractInstaApiHandler extends BatchLogManager {
 			System.out
 					.println("Command Line arguments loaded. Starting with loading properties file(s)");
 			loadPropertyFile();
-			init();
+			init(propertyLoader.getProperty());
 			log("Properties file(s) loaded. Starting with execution of the process.");
 			execute();
 			log("Execution complete.");
@@ -69,7 +69,7 @@ public abstract class AbstractInstaApiHandler extends BatchLogManager {
 				propertyLoader.load(tempList);
 			} else {
 				tempList.add(getPropertyLoadDetails());
-				propertyLoader.load(getPropertyLoadDetails());
+				propertyLoader.load(tempList);
 			}
 		} else {
 			if (getPropertyLoadDetailsList() != null

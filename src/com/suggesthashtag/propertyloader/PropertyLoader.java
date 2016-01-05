@@ -23,7 +23,7 @@ import com.suggesthashtag.propertyloader.exception.PropertyException;
  */
 public class PropertyLoader {
 
-	private Property property = new Property();
+	private Property property = null;
 
 	public void load(PropertyLoaderDetails propFileDetails)
 			throws PropertyException {
@@ -34,12 +34,15 @@ public class PropertyLoader {
 
 	public void load(List<PropertyLoaderDetails> propFileDetailList)
 			throws PropertyException {
+		property = new Property();
 		try {
 			for (PropertyLoaderDetails propFileDetails : propFileDetailList) {
 				InputStream inputStream = PropertyLoader.class.getClassLoader()
 						.getResourceAsStream(propFileDetails.toString());
 				if (inputStream != null) {
-					this.property.load(inputStream);
+					Property tempProperty = new Property();
+					tempProperty.load(inputStream);
+					this.property.putAll(tempProperty);
 				} else {
 					throw new FileNotFoundException("Property file "
 							+ propFileDetails.toString()
@@ -53,7 +56,7 @@ public class PropertyLoader {
 		}
 	}
 
-	protected Property getProperty() {
+	public Property getProperty() {
 		return this.property;
 	}
 

@@ -4,6 +4,8 @@
 package com.suggesthashtag.instaapi;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 import org.apache.log4j.Logger;
 
@@ -21,16 +23,10 @@ public class Demo {
 	 * @throws IOException
 	 */
 	public static void main(String[] args) throws IOException {
-		LogManager.getInstance().log("Hello simple.");
-		LogManager.getInstance().log(LoggerLevel.WARN, "Hello with level.");
-		DemoThread thread = null;
-		//thread.run();
-		try {
-			thread.run();
-		} catch (NullPointerException exception) {
-			LogManager.getInstance().log(LoggerLevel.ERROR,
-					"Error Thrown : " + exception.getLocalizedMessage());
-		}
+		Calendar cal = Calendar.getInstance();
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MMM/yyyy_HH:mm:ss");
+		System.out.println(dateFormat.format(cal.getTime()));
+		
 	}
 
 }
