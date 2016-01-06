@@ -4,8 +4,6 @@ import java.util.List;
 
 import com.suggesthashtag.instaapi.framework.AbstractInstaApiHandler;
 import com.suggesthashtag.instaapi.framework.annotation.ApiBatchAnnotaion;
-import com.suggesthashtag.logger.BatchLogManager;
-import com.suggesthashtag.logger.LogManager;
 import com.suggesthashtag.propertyloader.PropertyLoaderDetails;
 
 @ApiBatchAnnotaion(requiredCommandLineArgs = { "environment" })

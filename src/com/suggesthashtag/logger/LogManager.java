@@ -11,7 +11,6 @@ import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
 import com.suggesthashtag.logger.exception.LoggerException;
-import com.suggesthashtag.propertyloader.PropertyLoader;
 
 /**
  * Singleton class for managing logs. Improvements to do:
@@ -26,7 +25,7 @@ import com.suggesthashtag.propertyloader.PropertyLoader;
  */
 public abstract class LogManager {
 
-	protected static String batchName = "";
+	protected String batchName = "";
 
 	private LogManager() {
 	}
@@ -57,14 +56,11 @@ public abstract class LogManager {
 		Logger logger = Logger.getLogger(batchName);
 		if (loggerPropertyConf.getProperty("log.filename").contains("{")
 				&& loggerPropertyConf.getProperty("log.filename").contains("}")) {
-			Calendar cal = Calendar.getInstance();
+
 			String formatLoggerFileName = formatLoggerFileName(loggerPropertyConf
 					.getProperty("log.filename"));
-
-			SimpleDateFormat dateFormat = new SimpleDateFormat(
-					"dd/MMM/yyyy_HH:mm:ss");
-			System.out.println(dateFormat.format(cal.getTime()));
-			loggerPropertyConf.setProperty("log.filename", "");
+			loggerPropertyConf.remove("log.filename");
+			loggerPropertyConf.put("log.filename", formatLoggerFileName);
 		}
 		PropertyConfigurator.configure(loggerPropertyConf);
 		log("---- Logger object (" + batchName + ") is ready.");
@@ -73,10 +69,38 @@ public abstract class LogManager {
 	/**
 	 * @param property
 	 * @return
+	 * @throws LoggerException
 	 */
-	private String formatLoggerFileName(String loggerFileName) {
-		String newLoggerFileName = loggerFileName;
-		return newLoggerFileName;
+	private String formatLoggerFileName(String loggerFileName)
+			throws LoggerException {
+		char[] loggerFileNameChar = loggerFileName.toCharArray();
+		boolean isOpen = false;
+		StringBuffer str = new StringBuffer();
+		StringBuffer newLoggerFileName = new StringBuffer();
+		for (Character character : loggerFileNameChar) {
+			if (character == '{') {
+				if (isOpen) {
+					throw new LoggerException("Invalid logger name pattern.");
+				}
+				str = new StringBuffer();
+				isOpen = true;
+			} else if (character == '}') {
+				if (!isOpen) {
+					throw new LoggerException("Invalid logger name pattern.");
+				}
+				isOpen = false;
+				SimpleDateFormat dateFormat = new SimpleDateFormat(
+						str.toString());
+				Calendar cal = Calendar.getInstance();
+				newLoggerFileName.append(dateFormat.format(cal.getTime()));
+			} else if (isOpen) {
+				str.append(character);
+			} else {
+				newLoggerFileName.append(character);
+			}
+		}
+
+		return newLoggerFileName.toString();
 	}
 
 	public void log(String message) {
@@ -118,5 +142,5 @@ public abstract class LogManager {
 	}
 
 	public abstract String getLoggerName();
-	
+
 }
