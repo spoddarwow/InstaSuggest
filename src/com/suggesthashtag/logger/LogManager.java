@@ -76,7 +76,6 @@ public abstract class LogManager {
 	 */
 	private String formatLoggerFileName(String loggerFileName) {
 		String newLoggerFileName = loggerFileName;
-		
 		return newLoggerFileName;
 	}
 
@@ -119,4 +118,5 @@ public abstract class LogManager {
 	}
 
 	public abstract String getLoggerName();
+	
 }
