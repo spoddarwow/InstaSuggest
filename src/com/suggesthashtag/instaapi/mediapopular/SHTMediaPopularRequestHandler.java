@@ -30,7 +30,11 @@ public class SHTMediaPopularRequestHandler extends AbstractInstaApiHandler {
 	 */
 	@Override
 	public void execute() {
-		log("Hello World;");
+		log("Executing the SHTMediaPopularRequestHandler.");
+		// Hit the instagram api.
+		
+		// Store in DB.
+		log("Execution over for the SHTMediaPopularRequestHandler.");
 	}
 
 	/*
