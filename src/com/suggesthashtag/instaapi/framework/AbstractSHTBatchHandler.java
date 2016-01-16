@@ -15,22 +15,23 @@ import com.suggesthashtag.propertyloader.exception.PropertyException;
  * @author sumitpoddar
  *
  */
-public abstract class AbstractInstaApiHandler extends BatchLogManager {
+public abstract class AbstractSHTBatchHandler extends BatchLogManager {
 
 	/**
 	 * @param batchName
 	 */
-	public AbstractInstaApiHandler(String batchName) {
+	public AbstractSHTBatchHandler(String batchName) {
 		super(batchName);
 		// TODO Auto-generated constructor stub
 	}
 
-	private PropertyLoader propertyLoader = new PropertyLoader();
+	protected PropertyLoader propertyLoader = new PropertyLoader();
 	private CommandLineArguments commandLinesArgs = null;
 
-	public void process(Class<? extends AbstractInstaApiHandler> callerClass,
+	public void process(Class<? extends AbstractSHTBatchHandler> callerClass,
 			String[] args) {
 		try {
+			System.out.println(System.out.getClass().getName());
 			System.out.println("----- Starting with the batch process : "
 					+ callerClass.getName());
 			System.out.println("Loading Command Line arguments");

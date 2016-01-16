@@ -1,13 +1,25 @@
 package com.suggesthashtag.instaapi.mediapopular;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
-import com.suggesthashtag.instaapi.framework.AbstractInstaApiHandler;
+import org.apache.http.HttpException;
+
+import com.suggesthashtag.instaapi.beans.HttpResultBean;
+import com.suggesthashtag.instaapi.framework.AbstractSHTBatchHandler;
+import com.suggesthashtag.instaapi.framework.SHTBatchUtil;
 import com.suggesthashtag.instaapi.framework.annotation.ApiBatchAnnotaion;
+import com.suggesthashtag.instaapi.httpconnection.HTTPConnectionUtil;
+import com.suggesthashtag.instaapi.httpconnection.HttpConnectionException;
+import com.suggesthashtag.instaapi.httpconnection.HttpConnectionParams;
 import com.suggesthashtag.propertyloader.PropertyLoaderDetails;
+import com.suggesthashtag.propertyloader.exception.PropertyException;
 
 @ApiBatchAnnotaion(requiredCommandLineArgs = { "environment" })
-public class SHTMediaPopularRequestHandler extends AbstractInstaApiHandler {
+public class SHTMediaPopularRequestHandler extends AbstractSHTBatchHandler {
 
 	/**
 	 * @param batchName
@@ -30,11 +42,40 @@ public class SHTMediaPopularRequestHandler extends AbstractInstaApiHandler {
 	 */
 	@Override
 	public void execute() {
-		log("Executing the SHTMediaPopularRequestHandler.");
 		// Hit the instagram api.
-		
-		// Store in DB.
-		log("Execution over for the SHTMediaPopularRequestHandler.");
+		try {
+			log("Executing the SHTMediaPopularRequestHandler.");
+			HttpConnectionParams httpConnectionParams = SHTBatchUtil
+					.getInstance().buildHttpParam(super.propertyLoader);
+			HttpResultBean resultBeans = HTTPConnectionUtil.getInstance()
+					.getHttpGetResponse(httpConnectionParams);
+			log("Execution over for the SHTMediaPopularRequestHandler. : "
+					+ resultBeans.getResponse());
+		} catch (MalformedURLException exception) {
+			// TODO Auto-generated catch block
+			exception.printStackTrace();
+		} catch (PropertyException exception) {
+			// TODO Auto-generated catch block
+			exception.printStackTrace();
+		} catch (URISyntaxException exception) {
+			// TODO Auto-generated catch block
+			exception.printStackTrace();
+		} catch (HttpConnectionException exception) {
+			// TODO Auto-generated catch block
+			exception.printStackTrace();
+		} catch (IOException exception) {
+			// TODO Auto-generated catch block
+			exception.printStackTrace();
+		} catch (HttpException exception) {
+			// TODO Auto-generated catch block
+			exception.printStackTrace();
+		} catch (InterruptedException exception) {
+			// TODO Auto-generated catch block
+			exception.printStackTrace();
+		} catch (ExecutionException exception) {
+			// TODO Auto-generated catch block
+			exception.printStackTrace();
+		}
 	}
 
 	/*

@@ -3,12 +3,16 @@
  */
 package com.suggesthashtag.instaapi;
 
+import java.io.File;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+import org.apache.http.HttpHost;
 import org.apache.log4j.Logger;
 
+import com.suggesthashtag.instaapi.httpconnection.httpProxy.HttpProxyType;
 import com.suggesthashtag.logger.LogManager;
 import com.suggesthashtag.logger.LoggerLevel;
 
@@ -23,10 +27,14 @@ public class Demo {
 	 * @throws IOException
 	 */
 	public static void main(String[] args) throws IOException {
-		Calendar cal = Calendar.getInstance();
-		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MMM/yyyy_HH:mm:ss");
-		System.out.println(dateFormat.format(cal.getTime()));
 		
+		try {
+		    System.out.println("Holla");
+		    System.setOut(new PrintStream(new File("/Volumes/Seagate Expansion Drive/Sumit/My Work/logs/suggesthashTag/sysout.log")));
+		    System.out.println("Bye bye. It was fun!!!");
+		} catch (Exception e) {
+		     e.printStackTrace();
+		}
 	}
 
 }
