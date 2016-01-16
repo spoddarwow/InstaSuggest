@@ -47,10 +47,10 @@ public class SHTMediaPopularRequestHandler extends AbstractSHTBatchHandler {
 			log("Executing the SHTMediaPopularRequestHandler.");
 			HttpConnectionParams httpConnectionParams = SHTBatchUtil
 					.getInstance().buildHttpParam(super.propertyLoader);
-			HttpResultBean resultBeans = HTTPConnectionUtil.getInstance()
+			String resultJson = HTTPConnectionUtil.getInstance()
 					.getHttpGetResponse(httpConnectionParams);
 			log("Execution over for the SHTMediaPopularRequestHandler. : "
-					+ resultBeans.getResponse());
+					+ resultJson);
 		} catch (MalformedURLException exception) {
 			// TODO Auto-generated catch block
 			exception.printStackTrace();

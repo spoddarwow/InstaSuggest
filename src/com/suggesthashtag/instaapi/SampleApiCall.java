@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.CharBuffer;
 import java.util.concurrent.Future;
 
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpGet;
@@ -16,6 +17,7 @@ import org.apache.http.nio.IOControl;
 import org.apache.http.nio.client.methods.AsyncCharConsumer;
 import org.apache.http.nio.client.methods.HttpAsyncMethods;
 import org.apache.http.protocol.HttpContext;
+import org.apache.http.util.EntityUtils;
 
 import com.suggesthashtag.instaapi.beans.HttpResultBean;
 
@@ -29,17 +31,19 @@ public class SampleApiCall {
 				.setDefaultRequestConfig(requestConfig).build();
 		try {
 			httpclient.start();
-			String bug = "";
-			HttpPost httpGet = new HttpPost(
+			HttpGet httpGet = new HttpGet(
 					"https://api.instagram.com/v1/tags/hi%C3%A7/media/recent?access_token=1689077491.1fb234f.37f96a2796914dfc8c5d064c652d5821");
 			Future<HttpResponse> future = httpclient.execute(httpGet, null);
 			HttpResponse result = future.get();
 			if (result != null) {
 				System.out.println("Request successfully executed");
+				HttpEntity entity = result.getEntity();
 
-				//System.out.println(result.getHttpResponse());
+				if (entity != null) {
+					String authResponse = EntityUtils.toString(entity, "UTF8");
+					System.out.println(authResponse);
+				}
 
-				//System.out.println(result.getResponse());
 			} else {
 				System.out.println("Request failed");
 			}

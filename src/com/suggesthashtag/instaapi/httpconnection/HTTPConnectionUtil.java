@@ -7,7 +7,10 @@ import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpException;
+import org.apache.http.HttpRequest;
+import org.apache.http.HttpResponse;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -16,6 +19,7 @@ import org.apache.http.entity.ContentType;
 import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
 import org.apache.http.nio.client.methods.HttpAsyncMethods;
 import org.apache.http.nio.protocol.HttpAsyncRequestProducer;
+import org.apache.http.util.EntityUtils;
 
 import com.suggesthashtag.instaapi.beans.HttpResultBean;
 import com.suggesthashtag.instaapi.httpconnection.httpProxy.HttpProxyType;
@@ -36,26 +40,25 @@ public class HTTPConnectionUtil {
 		return MY_INSANCE;
 	}
 
-	public HttpResultBean getHttpGetResponse(
-			HttpConnectionParams httpConnectionParams)
+	public String getHttpGetResponse(HttpConnectionParams httpConnectionParams)
 			throws HttpConnectionException, IOException, HttpException,
 			InterruptedException, ExecutionException {
 
-		return getHttpMainResponse(
-				httpConnectionParams,
-				HttpAsyncMethods.createGet(httpConnectionParams.getRequestUri()));
+		return getHttpMainResponse(httpConnectionParams, new HttpGet(
+				httpConnectionParams.getRequestUri()));
 	}
 
-	public HttpResultBean getHttpPostResponse(
-			HttpConnectionParams httpConnectionParams)
-			throws HttpConnectionException {
-		return null;
-	}
-
-	private HttpResultBean getHttpMainResponse(
-			HttpConnectionParams httpConnectionParams,
-			HttpAsyncRequestProducer httpAsncRequestBase)
+	public String getHttpPostResponse(HttpConnectionParams httpConnectionParams)
 			throws HttpConnectionException, IOException, HttpException {
+		return getHttpMainResponse(httpConnectionParams, new HttpPost(
+				httpConnectionParams.getRequestUri()));
+	}
+
+	private String getHttpMainResponse(
+			HttpConnectionParams httpConnectionParams,
+			HttpRequestBase httpRequestBase) throws HttpConnectionException,
+			IOException, HttpException {
+		String apiResponse = "";
 		RequestConfig requestConfig = null;
 		if (httpConnectionParams == null) {
 			throw new HttpConnectionException(
@@ -71,16 +74,14 @@ public class HTTPConnectionUtil {
 					.setProxy(
 							httpConnectionParams.getHttpProxyObject()
 									.getHttpHost()).build();
-			((HttpRequestBase) httpAsncRequestBase.generateRequest())
-					.setConfig(requestConfig);
+			httpRequestBase.setConfig(requestConfig);
 
 		}
-		HttpResultBean resultBean = null;
+		HttpResponse resultBean = null;
 		try {
 			connectionPool.start();
-			Future<HttpResultBean> future = connectionPool.execute(
-					httpAsncRequestBase, new HttpConnectionResponseConsumer(),
-					null);
+			Future<HttpResponse> future = connectionPool.execute(
+					httpRequestBase, null);
 			resultBean = future.get();
 		} catch (InterruptedException exception) {
 			// TODO Auto-generated catch block
@@ -91,7 +92,16 @@ public class HTTPConnectionUtil {
 		} finally {
 			connectionPool.close();
 		}
-		return resultBean;
+
+		if (resultBean != null) {
+			HttpEntity entity = resultBean.getEntity();
+			if (entity != null) {
+				apiResponse = EntityUtils.toString(entity, "UTF8");
+			}
+
+		}
+
+		return apiResponse;
 
 	}
 }
