@@ -8,13 +8,13 @@ import java.util.concurrent.ExecutionException;
 
 import org.apache.http.HttpException;
 
-import com.suggesthashtag.instaapi.beans.HttpResultBean;
 import com.suggesthashtag.instaapi.framework.AbstractSHTBatchHandler;
 import com.suggesthashtag.instaapi.framework.SHTBatchUtil;
 import com.suggesthashtag.instaapi.framework.annotation.ApiBatchAnnotaion;
 import com.suggesthashtag.instaapi.httpconnection.HTTPConnectionUtil;
 import com.suggesthashtag.instaapi.httpconnection.HttpConnectionException;
 import com.suggesthashtag.instaapi.httpconnection.HttpConnectionParams;
+import com.suggesthashtag.instaapi.response.bean.MediaPopularResponse;
 import com.suggesthashtag.propertyloader.PropertyLoaderDetails;
 import com.suggesthashtag.propertyloader.exception.PropertyException;
 
@@ -49,6 +49,9 @@ public class SHTMediaPopularRequestHandler extends AbstractSHTBatchHandler {
 					.getInstance().buildHttpParam(super.propertyLoader);
 			String resultJson = HTTPConnectionUtil.getInstance()
 					.getHttpGetResponse(httpConnectionParams);
+			MediaPopularResponse responseObject = (MediaPopularResponse) SHTBatchUtil
+					.getInstance().convertJsonToObject(resultJson,
+							MediaPopularResponse.class);
 			log("Execution over for the SHTMediaPopularRequestHandler. : "
 					+ resultJson);
 		} catch (MalformedURLException exception) {

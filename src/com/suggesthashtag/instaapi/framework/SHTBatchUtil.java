@@ -7,12 +7,14 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import com.google.gson.Gson;
 import com.suggesthashtag.instaapi.httpconnection.HttpConnectionParams;
 import com.suggesthashtag.instaapi.httpconnection.httpProxy.HttpProxyBasicImpl;
 import com.suggesthashtag.instaapi.httpconnection.httpProxy.HttpProxyBasicWithCredentialImpl;
 import com.suggesthashtag.instaapi.httpconnection.httpProxy.HttpProxyNoImpl;
 import com.suggesthashtag.instaapi.httpconnection.httpProxy.HttpProxyType;
 import com.suggesthashtag.instaapi.httpconnection.httpProxy.HttpProxyTypeInterface;
+import com.suggesthashtag.instaapi.response.APIResponse;
 import com.suggesthashtag.propertyloader.PropertyLoader;
 import com.suggesthashtag.propertyloader.exception.PropertyException;
 
@@ -75,5 +77,16 @@ public class SHTBatchUtil {
 			}
 		}
 		return httpParams;
+	}
+
+	public Object convertJsonToObject(String jsonObject,
+			Class<? extends APIResponse> wrapperClass) {
+
+		if (jsonObject == null || "".equals(jsonObject) || wrapperClass == null) {
+			return null;
+		}
+		Gson gson = new Gson();
+		return gson.fromJson(jsonObject, wrapperClass);
+
 	}
 }

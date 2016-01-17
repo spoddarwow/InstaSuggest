@@ -19,7 +19,9 @@ import org.apache.http.nio.client.methods.HttpAsyncMethods;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
 
+import com.google.gson.Gson;
 import com.suggesthashtag.instaapi.beans.HttpResultBean;
+import com.suggesthashtag.instaapi.response.bean.MediaPopularResponse;
 
 public class SampleApiCall {
 	static StringBuffer response = new StringBuffer();
@@ -32,7 +34,7 @@ public class SampleApiCall {
 		try {
 			httpclient.start();
 			HttpGet httpGet = new HttpGet(
-					"https://api.instagram.com/v1/tags/hi%C3%A7/media/recent?access_token=1689077491.1fb234f.37f96a2796914dfc8c5d064c652d5821");
+					"https://api.instagram.com/v1/media/popular?access_token=1689077491.1fb234f.37f96a2796914dfc8c5d064c652d5821");
 			Future<HttpResponse> future = httpclient.execute(httpGet, null);
 			HttpResponse result = future.get();
 			if (result != null) {
@@ -42,6 +44,10 @@ public class SampleApiCall {
 				if (entity != null) {
 					String authResponse = EntityUtils.toString(entity, "UTF8");
 					System.out.println(authResponse);
+					Gson gson = new Gson();
+					MediaPopularResponse root = gson.fromJson(authResponse,
+							MediaPopularResponse.class);
+					System.out.println(root);
 				}
 
 			} else {
