@@ -2,4 +2,5 @@
 > HTTP Async Post Call
 > Properties/Logger loaded to be accessed in a static way and it should be available across class. LogManager.log() should log into correct Batch Log File. Similarly for Property.
 > System.out.println/err should be in log4j.
-> 
+> Hibernate cache
+> Hibernate dynamic conf loading.
