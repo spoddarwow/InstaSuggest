@@ -3,13 +3,13 @@
                                          "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
 	<session-factory name="">
-		<property name="hibernate.connection.driver_class">oracle.jdbc.driver.OracleDriver</property>
+		<!-- <property name="hibernate.connection.driver_class">oracle.jdbc.driver.OracleDriver</property>
 		<property name="hibernate.dialect">org.hibernate.dialect.Oracle10gDialect</property>
 		<property name="hibernate.connection.username">system</property>
 		<property name="hibernate.connection.password">system</property>
 		<property name="hibernate.connection.url">jdbc:oracle:thin:@localhost:1521/xe</property>
 		<property name="hibernate.connection.autocommit">true</property>
-		<!-- <property name="hibernate.c3p0.min_size">5</property>
+		<property name="hibernate.c3p0.min_size">5</property>
 		<property name="hibernate.c3p0.max_size">20</property>
 		<property name="hibernate.c3p0.timeout">1800</property>
 		<property name="hibernate.c3p0.max_statements">50</property> -->
