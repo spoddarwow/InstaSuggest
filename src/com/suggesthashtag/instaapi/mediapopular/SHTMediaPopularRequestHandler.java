@@ -3,6 +3,7 @@ package com.suggesthashtag.instaapi.mediapopular;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -47,6 +48,8 @@ public class SHTMediaPopularRequestHandler extends AbstractSHTBatchHandler {
 			log("Executing the SHTMediaPopularRequestHandler.");
 			HttpConnectionParams httpConnectionParams = SHTBatchUtil
 					.getInstance().buildHttpParam(super.propertyLoader);
+			System.out.println(super.propertyLoader.getString("@include"));
+			System.out.println(super.propertyLoader.getString("log.filename"));
 			String resultJson = HTTPConnectionUtil.getInstance()
 					.getHttpGetResponse(httpConnectionParams);
 			MediaPopularResponse responseObject = (MediaPopularResponse) SHTBatchUtil
@@ -101,7 +104,7 @@ public class SHTMediaPopularRequestHandler extends AbstractSHTBatchHandler {
 	 */
 	@Override
 	public PropertyLoaderDetails getPropertyLoadDetails() {
-		return new PropertyLoaderDetails("mediaPopular.properties", true);
+		return null;
 	}
 
 	/*
@@ -112,8 +115,10 @@ public class SHTMediaPopularRequestHandler extends AbstractSHTBatchHandler {
 	 */
 	@Override
 	public List<PropertyLoaderDetails> getPropertyLoadDetailsList() {
-		// TODO Auto-generated method stub
-		return null;
+		List<PropertyLoaderDetails> propertyList = new ArrayList<PropertyLoaderDetails>();
+		propertyList.add(new PropertyLoaderDetails("db.properties", true));
+		propertyList.add(new PropertyLoaderDetails("mediaPopular.properties"));
+		return propertyList;
 	}
 
 }

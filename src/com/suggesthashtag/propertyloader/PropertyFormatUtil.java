@@ -50,7 +50,9 @@ public class PropertyFormatUtil {
 						dynamicPropValOn = false;
 						formattedPropertyValue.append(formatPropertyValue(
 								properties.getProperty(dynamicPropValueKey
-										.toString()), properties));
+										.toString(), System
+										.getProperty(dynamicPropValueKey
+												.toString())), properties));
 						dynamicPropValueKey = new StringBuffer();
 					} else {
 						formattedPropertyValue
