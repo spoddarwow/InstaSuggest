@@ -14,6 +14,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.AnnotationConfiguration;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.service.ServiceRegistry;
 
 /**
  * @author xspro
@@ -35,15 +36,15 @@ public class Demo {
 		property.load(inputStream);
 		System.out.println(property);
 		try {
-			factory = new AnnotationConfiguration().mergeProperties(property)
-					.configure("hibernate.cfg.xml")
-					// .addPackage("com.suggesthashtag.db.hibernate.domain")
-					// .addAnnotatedClass(Student.class)
-					.buildSessionFactory();
+			System.out.println("1");
+			factory = new Configuration().mergeProperties(property)
+					.addPackage("com.suggesthashtag.db.hibernate.domain")
+					.addAnnotatedClass(Student.class).buildSessionFactory();
+			System.out.println("2");
 			Session session = factory.getCurrentSession();
-			Student student = new Student(10001, "Sumit Poddar", 19);
+			System.out.println("3");
+			Student student = new Student(10003, "Sumit Poddar", 19);
 			try {
-
 				session.beginTransaction();
 				session.save(student);
 				session.getTransaction().commit();

@@ -19,7 +19,6 @@ import javax.persistence.Table;
 @Table(name = "STUDENT")
 public class Student {
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	@Column(name = "id")
 	private long id;
 
