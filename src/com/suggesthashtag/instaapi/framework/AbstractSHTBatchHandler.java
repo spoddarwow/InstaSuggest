@@ -36,7 +36,10 @@ public abstract class AbstractSHTBatchHandler extends SHTMainApp {
 			System.out
 					.println("Command Line arguments loaded. Starting with loading properties file(s)");
 			propertyLoader = new PropertyLoader();
+			long start = System.currentTimeMillis();
 			loadPropertyFile();
+			System.out.println("Time to load : " + (System.currentTimeMillis()
+					- start));
 			init(propertyLoader.getProperty());
 			log("Properties file(s) loaded. Starting with execution of the process.");
 			execute();

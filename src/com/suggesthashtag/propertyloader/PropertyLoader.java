@@ -3,9 +3,6 @@
  */
 package com.suggesthashtag.propertyloader;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +13,7 @@ import com.suggesthashtag.propertyloader.datatype.BasicFloatType;
 import com.suggesthashtag.propertyloader.datatype.BasicIntegerType;
 import com.suggesthashtag.propertyloader.datatype.BasicStringType;
 import com.suggesthashtag.propertyloader.datatype.DataTypeEnum;
+import com.suggesthashtag.propertyloader.decorateProp.PropertyValueDecoratorThread;
 import com.suggesthashtag.propertyloader.exception.PropertyException;
 
 /**
@@ -25,34 +23,42 @@ public class PropertyLoader {
 
 	private Property property = null;
 
-	public void load(PropertyLoaderDetails propFileDetails)
-			throws PropertyException {
+	public void load(PropertyLoaderDetails propFileDetails) {
 		ArrayList<PropertyLoaderDetails> list = new ArrayList<PropertyLoaderDetails>();
 		list.add(propFileDetails);
 		load(list);
 	}
 
-	public void load(List<PropertyLoaderDetails> propFileDetailList)
-			throws PropertyException {
+	public void load(List<PropertyLoaderDetails> propFileDetailList) {
 		property = new Property();
+		ArrayList<PropertyValueDecoratorThread> threadList = new ArrayList<PropertyValueDecoratorThread>();
 		try {
-			for (PropertyLoaderDetails propFileDetails : propFileDetailList) {
-				InputStream inputStream = PropertyLoader.class.getClassLoader()
-						.getResourceAsStream(propFileDetails.toString());
-				if (inputStream != null) {
-					Property tempProperty = new Property();
-					tempProperty.load(inputStream);
-					this.property.putAll(tempProperty);
-				} else {
-					throw new FileNotFoundException("Property file "
-							+ propFileDetails.toString()
-							+ " not found in the classpath");
-				}
+			
+			
+			
+			for (int index = 0; index < propFileDetailList.size(); index++) {
+				//System.out.println("Init " + index);
+				PropertyValueDecoratorThread propLoaderDecThread = new PropertyValueDecoratorThread(
+						index, propFileDetailList.get(index), "PropLoader_"
+								+ index);
+				//System.out.println("Adding into Lists");
+				//propLoaderDecThread.getThisThread().start();
+				threadList.add(propLoaderDecThread);
 			}
-		} catch (FileNotFoundException exception) {
-			throw new PropertyException(exception);
-		} catch (IOException exception) {
-			throw new PropertyException(exception);
+			for (PropertyValueDecoratorThread thread : threadList) {
+				//System.out.println("Starting");
+				
+				thread.getThisThread().join();
+			}
+			for (PropertyValueDecoratorThread thread : threadList) {
+				//System.out.println(" Putting all --------");
+				property.putAll(thread.getTempProperty());
+				//System.out.println(property);
+			}
+
+		} catch (InterruptedException exception) {
+			// TODO Auto-generated catch block
+			exception.printStackTrace();
 		}
 	}
 
@@ -153,13 +159,15 @@ public class PropertyLoader {
 				defaultValue));
 	}
 
-	public List getList(String propertyKey) throws PropertyException {
-		if (this.property.get(propertyKey) == null) {
-
-		}
-		@SuppressWarnings("unchecked")
-		AbstractDataType<List> basicStringType = factoryDataTypeMethod(DataTypeEnum.LIST);
-		return basicStringType.getValue(this.property.getProperty(propertyKey,
-				defaultValue));
-	}
+	/*
+	 * public List getList(String propertyKey) throws PropertyException { if
+	 * (this.property.get(propertyKey) == null) {
+	 * 
+	 * }
+	 * 
+	 * @SuppressWarnings("unchecked") AbstractDataType<List> basicStringType =
+	 * factoryDataTypeMethod(DataTypeEnum.LIST); return
+	 * basicStringType.getValue(this.property.getProperty(propertyKey,
+	 * defaultValue)); }
+	 */
 }

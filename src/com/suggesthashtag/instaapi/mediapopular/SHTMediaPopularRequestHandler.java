@@ -48,6 +48,9 @@ public class SHTMediaPopularRequestHandler extends AbstractSHTBatchHandler {
 	@Override
 	public void execute() {
 		// Hit the instagram api.
+
+		// Takes 5 ms to load prop files and 1 ms to show value of instaapi.url.
+
 		try {
 			log("Executing the SHTMediaPopularRequestHandler.");
 			HttpConnectionParams httpConnectionParams = SHTBatchUtil
@@ -67,6 +70,7 @@ public class SHTMediaPopularRequestHandler extends AbstractSHTBatchHandler {
 			System.out.println(super.propertyLoader.getString("db.class_load"));
 			log("Execution over for the SHTMediaPopularRequestHandler. : "
 					+ resultJson);
+
 		} catch (MalformedURLException exception) {
 			// TODO Auto-generated catch block
 			exception.printStackTrace();
