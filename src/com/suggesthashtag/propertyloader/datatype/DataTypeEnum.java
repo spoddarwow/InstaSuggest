@@ -3,6 +3,8 @@
  */
 package com.suggesthashtag.propertyloader.datatype;
 
+import java.util.List;
+
 /**
  * @author sumitpoddar
  *
@@ -10,7 +12,7 @@ package com.suggesthashtag.propertyloader.datatype;
 public enum DataTypeEnum {
 
 	INTEGER(Integer.class), DOUBLE(Double.class), BOOLEAN(Boolean.class), STRING(
-			String.class), FLOAT(Float.class);
+			String.class), FLOAT(Float.class), LIST(List.class);
 
 	private Class dataTypeClass;
 

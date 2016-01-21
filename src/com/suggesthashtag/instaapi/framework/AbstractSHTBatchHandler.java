@@ -15,7 +15,7 @@ import com.suggesthashtag.propertyloader.exception.PropertyException;
  * @author sumitpoddar
  *
  */
-public abstract class AbstractSHTBatchHandler extends BatchLogManager {
+public abstract class AbstractSHTBatchHandler extends SHTMainApp {
 
 	/**
 	 * @param batchName
@@ -24,9 +24,6 @@ public abstract class AbstractSHTBatchHandler extends BatchLogManager {
 		super(batchName);
 		// TODO Auto-generated constructor stub
 	}
-
-	protected PropertyLoader propertyLoader = new PropertyLoader();
-	private CommandLineArguments commandLinesArgs = null;
 
 	public void process(Class<? extends AbstractSHTBatchHandler> callerClass,
 			String[] args) {
@@ -38,6 +35,7 @@ public abstract class AbstractSHTBatchHandler extends BatchLogManager {
 			commandLinesArgs = new CommandLineArguments(args);
 			System.out
 					.println("Command Line arguments loaded. Starting with loading properties file(s)");
+			propertyLoader = new PropertyLoader();
 			loadPropertyFile();
 			init(propertyLoader.getProperty());
 			log("Properties file(s) loaded. Starting with execution of the process.");
@@ -55,15 +53,10 @@ public abstract class AbstractSHTBatchHandler extends BatchLogManager {
 				+ " is finished successfully.");
 	}
 
-	public CommandLineArguments getCommandLineArgs() {
-		return this.commandLinesArgs;
-	}
-
 	protected void loadPropertyFile() throws PropertyException {
 		if (loadMainPropertyFile()) {
 			List<PropertyLoaderDetails> tempList = new ArrayList<PropertyLoaderDetails>();
-			tempList.add(new PropertyLoaderDetails("batchMain.properties",
-					false));
+			tempList.addAll(getALlMainPropertyFiles());
 			if (getPropertyLoadDetailsList() != null
 					&& getPropertyLoadDetailsList().size() > 0) {
 				tempList.addAll(getPropertyLoadDetailsList());
@@ -83,9 +76,19 @@ public abstract class AbstractSHTBatchHandler extends BatchLogManager {
 
 	}
 
-	public abstract void execute();
+	protected ArrayList<PropertyLoaderDetails> getALlMainPropertyFiles() {
+		ArrayList<PropertyLoaderDetails> tempList = new ArrayList<PropertyLoaderDetails>();
+		tempList.add(new PropertyLoaderDetails("batchMain.properties", false));
+		tempList.add(new PropertyLoaderDetails("db.properties", false));
+		tempList.add(new PropertyLoaderDetails("messages.properties", false));
+		return tempList;
+	}
 
-	public abstract boolean loadMainPropertyFile();
+	public boolean loadMainPropertyFile() {
+		return true;
+	}
+
+	public abstract void execute();
 
 	public abstract PropertyLoaderDetails getPropertyLoadDetails();
 

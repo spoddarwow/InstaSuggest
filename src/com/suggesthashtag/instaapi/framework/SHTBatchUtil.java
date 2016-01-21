@@ -8,6 +8,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 import com.google.gson.Gson;
+import com.suggesthashtag.instaapi.framework.exception.SHTMainException;
 import com.suggesthashtag.instaapi.httpconnection.HttpConnectionParams;
 import com.suggesthashtag.instaapi.httpconnection.httpProxy.HttpProxyBasicImpl;
 import com.suggesthashtag.instaapi.httpconnection.httpProxy.HttpProxyBasicWithCredentialImpl;
@@ -81,7 +82,6 @@ public class SHTBatchUtil {
 
 	public Object convertJsonToObject(String jsonObject,
 			Class<? extends APIResponse> wrapperClass) {
-
 		if (jsonObject == null || "".equals(jsonObject) || wrapperClass == null) {
 			return null;
 		}

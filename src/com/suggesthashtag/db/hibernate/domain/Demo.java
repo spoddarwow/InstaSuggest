@@ -3,7 +3,6 @@
  */
 package com.suggesthashtag.db.hibernate.domain;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -11,10 +10,7 @@ import java.util.Properties;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.hibernate.cfg.AnnotationConfiguration;
 import org.hibernate.cfg.Configuration;
-import org.hibernate.service.ServiceRegistry;
 
 /**
  * @author xspro
@@ -34,17 +30,16 @@ public class Demo {
 		InputStream inputStream = Demo.class.getClassLoader()
 				.getResourceAsStream("demo.properties");
 		property.load(inputStream);
-		System.out.println(property);
 		try {
-			System.out.println("1");
 			factory = new Configuration().mergeProperties(property)
+					// .configure("hibernate.cfg.xml")
 					.addPackage("com.suggesthashtag.db.hibernate.domain")
-					.addAnnotatedClass(Student.class).buildSessionFactory();
-			System.out.println("2");
+					//.addAnnotatedClass(Student.class)
+					.buildSessionFactory();
 			Session session = factory.getCurrentSession();
-			System.out.println("3");
-			Student student = new Student(10003, "Sumit Poddar", 19);
+			Student student = new Student(100045, "Sumit Poddar", 19);
 			try {
+
 				session.beginTransaction();
 				session.save(student);
 				session.getTransaction().commit();

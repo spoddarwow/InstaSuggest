@@ -152,4 +152,14 @@ public class PropertyLoader {
 		return basicStringType.getValue(this.property.getProperty(propertyKey,
 				defaultValue));
 	}
+
+	public List getList(String propertyKey) throws PropertyException {
+		if (this.property.get(propertyKey) == null) {
+
+		}
+		@SuppressWarnings("unchecked")
+		AbstractDataType<List> basicStringType = factoryDataTypeMethod(DataTypeEnum.LIST);
+		return basicStringType.getValue(this.property.getProperty(propertyKey,
+				defaultValue));
+	}
 }

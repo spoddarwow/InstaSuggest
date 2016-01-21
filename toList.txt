@@ -4,3 +4,4 @@
 > System.out.println/err should be in log4j.
 > Hibernate cache
 > Hibernate dynamic conf loading.
+> Test static property loader SHTMainApp.getPropertyLoader().getProperty() with threading.
