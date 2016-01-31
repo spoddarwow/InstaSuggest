@@ -4,7 +4,15 @@
 package com.suggesthashtag.propertyloader;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import com.suggesthashtag.propertyloader.datatype.AbstractDataType;
 import com.suggesthashtag.propertyloader.datatype.BasicBooleanType;
@@ -13,52 +21,78 @@ import com.suggesthashtag.propertyloader.datatype.BasicFloatType;
 import com.suggesthashtag.propertyloader.datatype.BasicIntegerType;
 import com.suggesthashtag.propertyloader.datatype.BasicStringType;
 import com.suggesthashtag.propertyloader.datatype.DataTypeEnum;
+import com.suggesthashtag.propertyloader.decorateProp.PropertyListHolder;
 import com.suggesthashtag.propertyloader.decorateProp.PropertyValueDecoratorThread;
 import com.suggesthashtag.propertyloader.exception.PropertyException;
 
 /**
  * @author sumitpoddar
  */
-public class PropertyLoader {
+public final class PropertyLoader {
 
 	private Property property = null;
+	private volatile HashMap<String, ArrayList<PropertyListHolder>> listDecorateMap = new HashMap<String, ArrayList<PropertyListHolder>>();
 
-	public void load(PropertyLoaderDetails propFileDetails) {
+	public void load(PropertyLoaderDetails propFileDetails)
+			throws PropertyException, InterruptedException, ExecutionException {
 		ArrayList<PropertyLoaderDetails> list = new ArrayList<PropertyLoaderDetails>();
 		list.add(propFileDetails);
 		load(list);
 	}
 
-	public void load(List<PropertyLoaderDetails> propFileDetailList) {
-		property = new Property();
-		ArrayList<PropertyValueDecoratorThread> threadList = new ArrayList<PropertyValueDecoratorThread>();
-		try {
-			
-			
-			
-			for (int index = 0; index < propFileDetailList.size(); index++) {
-				//System.out.println("Init " + index);
-				PropertyValueDecoratorThread propLoaderDecThread = new PropertyValueDecoratorThread(
-						index, propFileDetailList.get(index), "PropLoader_"
-								+ index);
-				//System.out.println("Adding into Lists");
-				//propLoaderDecThread.getThisThread().start();
-				threadList.add(propLoaderDecThread);
-			}
-			for (PropertyValueDecoratorThread thread : threadList) {
-				//System.out.println("Starting");
-				
-				thread.getThisThread().join();
-			}
-			for (PropertyValueDecoratorThread thread : threadList) {
-				//System.out.println(" Putting all --------");
-				property.putAll(thread.getTempProperty());
-				//System.out.println(property);
-			}
+	public void load(List<PropertyLoaderDetails> propFileDetailList)
+			throws PropertyException, InterruptedException, ExecutionException {
+		propertyLoadingThread(propFileDetailList);
+	}
 
-		} catch (InterruptedException exception) {
-			// TODO Auto-generated catch block
-			exception.printStackTrace();
+	private void propertyLoadingThread(
+			List<PropertyLoaderDetails> propFileDetailList)
+			throws InterruptedException, ExecutionException {
+		property = new Property();
+		Set<Future<Property>> set = new HashSet<Future<Property>>();
+		long start = System.currentTimeMillis();
+		ExecutorService executorPool = Executors
+				.newFixedThreadPool(propFileDetailList.size());
+
+		for (int index = 0; index < propFileDetailList.size(); index++) {
+
+			Future<Property> future = executorPool
+					.submit(new PropertyValueDecoratorThread(propFileDetailList
+							.get(index), index));
+			set.add(future);
+		}
+		Property propertyTemp = new Property();
+		for (Future<Property> future : set) {
+			// propertyTemp.putAll(future.get());
+			this.property.putAll(future.get());
+		}
+		System.out.println("listDecorateMap : " + listDecorateMap);
+		/*
+		 * if (propertyTemp != null && propertyTemp.size() > 0) { Set<Object>
+		 * keySet = propertyTemp.keySet(); Iterator<Object> keySetIterator =
+		 * keySet.iterator(); while (keySetIterator.hasNext()) { String key =
+		 * (String) keySetIterator.next(); String propValue =
+		 * PropertyFormatUtil.getInstance()
+		 * .formatPropertyValue(propertyTemp.getProperty(key), propertyTemp);
+		 * this.property.setProperty(key, propValue); } }
+		 */
+
+		System.out.println("Time to load : "
+				+ (System.currentTimeMillis() - start));
+	}
+
+	public synchronized HashMap<String, ArrayList<PropertyListHolder>> getPropertyListHolder() {
+		return listDecorateMap;
+	}
+
+	public void addPropertyListHolder(String key, PropertyListHolder listHolder) {
+		synchronized (listDecorateMap) {
+			ArrayList<PropertyListHolder> holderList = this.listDecorateMap
+					.get(key);
+			if (holderList == null) {
+				holderList = new ArrayList<PropertyListHolder>();
+			}
+			holderList.add(listHolder);
 		}
 	}
 

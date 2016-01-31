@@ -4,7 +4,6 @@
 package com.suggesthashtag.propertyloader;
 
 import java.util.Properties;
-import java.util.Stack;
 
 /**
  * @author sumitpoddar
@@ -48,11 +47,20 @@ public class PropertyFormatUtil {
 				} else if (propertyValueChars[charIndex] == '}') {
 					if (dynamicPropValOn) {
 						dynamicPropValOn = false;
-						formattedPropertyValue.append(formatPropertyValue(
-								properties.getProperty(dynamicPropValueKey
-										.toString(), System
-										.getProperty(dynamicPropValueKey
-												.toString())), properties));
+
+						if (properties.getProperty(dynamicPropValueKey
+								.toString(), System
+								.getProperty(dynamicPropValueKey.toString())) != null) {
+							formattedPropertyValue.append(formatPropertyValue(
+									properties.getProperty(dynamicPropValueKey
+											.toString(), System
+											.getProperty(dynamicPropValueKey
+													.toString())), properties));
+						} else {
+							formattedPropertyValue.append("${")
+									.append(dynamicPropValueKey).append("}");
+						}
+
 						dynamicPropValueKey = new StringBuffer();
 					} else {
 						formattedPropertyValue

@@ -5,22 +5,32 @@ package com.suggesthashtag.propertyloader.datatype;
 
 import java.util.List;
 
+import com.suggesthashtag.propertyloader.listPropertyLoader.IntegerListPropertyLoader;
+import com.suggesthashtag.propertyloader.listPropertyLoader.ListPropertyLoaderInterface;
+
 /**
  * @author sumitpoddar
  *
  */
 public enum DataTypeEnum {
 
-	INTEGER(Integer.class), DOUBLE(Double.class), BOOLEAN(Boolean.class), STRING(
-			String.class), FLOAT(Float.class), LIST(List.class);
+	INTEGER(Integer.class, new IntegerListPropertyLoader()), DOUBLE(
+			Double.class, new IntegerListPropertyLoader()), BOOLEAN(
+			Boolean.class, new IntegerListPropertyLoader()), STRING(
+			String.class, new IntegerListPropertyLoader()), FLOAT(Float.class,
+			new IntegerListPropertyLoader()), LIST(List.class, null);
 
 	private Class dataTypeClass;
+	private ListPropertyLoaderInterface listPropertyLoader;
 
 	/**
 	 * @param dataTypeClass
+	 * @param listPropertyLoader
 	 */
-	private DataTypeEnum(Class dataTypeClass) {
+	private DataTypeEnum(Class dataTypeClass,
+			ListPropertyLoaderInterface listPropertyLoader) {
 		this.dataTypeClass = dataTypeClass;
+		this.listPropertyLoader = listPropertyLoader;
 	}
 
 	public Class getDataTypeClass() {
@@ -29,6 +39,15 @@ public enum DataTypeEnum {
 
 	public void setDataTypeClass(Class dataTypeClass) {
 		this.dataTypeClass = dataTypeClass;
+	}
+
+	public ListPropertyLoaderInterface getListPropertyLoader() {
+		return this.listPropertyLoader;
+	}
+
+	public void setListPropertyLoader(
+			ListPropertyLoaderInterface listPropertyLoader) {
+		this.listPropertyLoader = listPropertyLoader;
 	}
 
 }

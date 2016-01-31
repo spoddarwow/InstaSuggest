@@ -6,52 +6,63 @@ package com.suggesthashtag.propertyloader.decorateProp;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Iterator;
+import java.util.Set;
+import java.util.concurrent.Callable;
 
 import com.suggesthashtag.propertyloader.Property;
+import com.suggesthashtag.propertyloader.PropertyFormatUtil;
 import com.suggesthashtag.propertyloader.PropertyLoader;
 import com.suggesthashtag.propertyloader.PropertyLoaderDetails;
-import com.suggesthashtag.propertyloader.exception.PropertyException;
 
 /**
  * @author sumitpoddar
  *
  */
-public class PropertyValueDecoratorThread implements Runnable {
+public class PropertyValueDecoratorThread implements Callable<Property> {
 
-	private int threadIndex;
 	private PropertyLoaderDetails propFileDetails;
-	private Thread thisThread;
-	private String threadName;
+	// private Thread thisThread;
 	private Property tempProperty = new Property();
+	private int index;
 
 	/**
 	 * @param threadIndex
 	 * @param propFileDetails
 	 * @param threadName
 	 */
-	public PropertyValueDecoratorThread(int threadIndex,
-			PropertyLoaderDetails propFileDetails, String threadName) {
+	public PropertyValueDecoratorThread(PropertyLoaderDetails propFileDetails,
+			int index) {
 		super();
-		this.threadIndex = threadIndex;
 		this.propFileDetails = propFileDetails;
-		this.threadName = threadName;
-		this.thisThread = new Thread(this, this.threadName);
-		this.thisThread.start();
+		this.index = index;
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see java.lang.Runnable#run()
+	 * @see java.util.concurrent.Callable#call()
 	 */
 	@Override
-	public void run() {
+	public Property call() throws Exception {
 		try {
 			InputStream inputStream = PropertyLoader.class.getClassLoader()
 					.getResourceAsStream(propFileDetails.toString());
 			if (inputStream != null) {
+				Property property = new Property();
 				tempProperty.load(inputStream);
-				System.out.println(tempProperty);
+				if (property != null && property.size() > 0) {
+					Set<Object> keySet = property.keySet();
+					Iterator<Object> keySetIterator = keySet.iterator();
+					while (keySetIterator.hasNext()) {
+						String key = (String) keySetIterator.next();
+						String propValue = PropertyFormatUtil.getInstance()
+								.formatPropertyValue(property.getProperty(key),
+										property);
+						tempProperty.setProperty(key, propValue);
+					}
+				}
+
 			} else {
 				throw new FileNotFoundException("Property file "
 						+ propFileDetails.toString()
@@ -62,47 +73,7 @@ public class PropertyValueDecoratorThread implements Runnable {
 		} catch (IOException exception) {
 			exception.printStackTrace();
 		}
-
-	}
-
-	public int getThreadIndex() {
-		return this.threadIndex;
-	}
-
-	public void setThreadIndex(int threadIndex) {
-		this.threadIndex = threadIndex;
-	}
-
-	public PropertyLoaderDetails getPropFileDetails() {
-		return this.propFileDetails;
-	}
-
-	public void setPropFileDetails(PropertyLoaderDetails propFileDetails) {
-		this.propFileDetails = propFileDetails;
-	}
-
-	public String getThreadName() {
-		return this.threadName;
-	}
-
-	public void setThreadName(String threadName) {
-		this.threadName = threadName;
-	}
-
-	public Property getTempProperty() {
-		return this.tempProperty;
-	}
-
-	public void setTempProperty(Property tempProperty) {
-		this.tempProperty = tempProperty;
-	}
-
-	public Thread getThisThread() {
-		return this.thisThread;
-	}
-
-	public void setThisThread(Thread thisThread) {
-		this.thisThread = thisThread;
+		return tempProperty;
 	}
 
 }

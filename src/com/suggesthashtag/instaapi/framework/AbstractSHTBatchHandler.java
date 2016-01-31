@@ -2,6 +2,7 @@ package com.suggesthashtag.instaapi.framework;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import com.suggesthashtag.logger.BatchLogManager;
 import com.suggesthashtag.logger.exception.LoggerException;
@@ -36,10 +37,9 @@ public abstract class AbstractSHTBatchHandler extends SHTMainApp {
 			System.out
 					.println("Command Line arguments loaded. Starting with loading properties file(s)");
 			propertyLoader = new PropertyLoader();
-			long start = System.currentTimeMillis();
 			loadPropertyFile();
-			System.out.println("Time to load : " + (System.currentTimeMillis()
-					- start));
+			System.out.println("Value : "+this.propertyLoader.getString("log4j.appender.FILE.File"));
+			System.out.println("Value : "+this.propertyLoader.getString("instaapi.url"));
 			init(propertyLoader.getProperty());
 			log("Properties file(s) loaded. Starting with execution of the process.");
 			execute();
@@ -51,12 +51,19 @@ public abstract class AbstractSHTBatchHandler extends SHTMainApp {
 		} catch (LoggerException exception) {
 			// TODO Auto-generated catch block
 			exception.printStackTrace();
+		} catch (InterruptedException exception) {
+			// TODO Auto-generated catch block
+			exception.printStackTrace();
+		} catch (ExecutionException exception) {
+			// TODO Auto-generated catch block
+			exception.printStackTrace();
 		}
 		log("Batch process for " + callerClass.getName()
 				+ " is finished successfully.");
 	}
 
-	protected void loadPropertyFile() throws PropertyException {
+	protected void loadPropertyFile() throws PropertyException,
+			InterruptedException, ExecutionException {
 		if (loadMainPropertyFile()) {
 			List<PropertyLoaderDetails> tempList = new ArrayList<PropertyLoaderDetails>();
 			tempList.addAll(getALlMainPropertyFiles());

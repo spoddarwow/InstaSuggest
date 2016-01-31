@@ -27,12 +27,14 @@ public class Property extends Properties {
 	public String getProperty(String propertyKey) {
 		return extractNFormatPropertyValue(propertyKey,
 				super.getProperty(propertyKey));
+		// return super.getProperty(propertyKey);
 	}
 
 	@Override
 	public String getProperty(String propertyKey, String defaultPropValue) {
 		return extractNFormatPropertyValue(propertyKey,
 				super.getProperty(propertyKey, defaultPropValue));
+		// return super.getProperty(propertyKey, defaultPropValue);
 	}
 
 	private String extractNFormatPropertyValue(String propertyKey,
@@ -45,8 +47,4 @@ public class Property extends Properties {
 		return propValue;
 	}
 
-	public Object setProperty(String key, String value) {
-		return value;
-
-	}
 }
