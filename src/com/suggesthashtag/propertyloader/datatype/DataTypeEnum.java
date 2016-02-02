@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.suggesthashtag.propertyloader.listPropertyLoader.IntegerListPropertyLoader;
 import com.suggesthashtag.propertyloader.listPropertyLoader.ListPropertyLoaderInterface;
+import com.suggesthashtag.propertyloader.listPropertyLoader.StringListPropertyLoader;
 
 /**
  * @author sumitpoddar
@@ -17,7 +18,7 @@ public enum DataTypeEnum {
 	INTEGER(Integer.class, new IntegerListPropertyLoader()), DOUBLE(
 			Double.class, new IntegerListPropertyLoader()), BOOLEAN(
 			Boolean.class, new IntegerListPropertyLoader()), STRING(
-			String.class, new IntegerListPropertyLoader()), FLOAT(Float.class,
+			String.class, new StringListPropertyLoader()), FLOAT(Float.class,
 			new IntegerListPropertyLoader()), LIST(List.class, null);
 
 	private Class dataTypeClass;

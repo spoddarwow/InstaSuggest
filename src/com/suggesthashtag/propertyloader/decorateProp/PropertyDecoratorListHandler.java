@@ -5,6 +5,7 @@ package com.suggesthashtag.propertyloader.decorateProp;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -26,7 +27,8 @@ public class PropertyDecoratorListHandler implements PropertyDecoratorInterface 
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T> T decorateProperty(String value) throws PropertyException {
+	public <T> T decorateProperty(String value, Properties properties)
+			throws PropertyException {
 		Object returningObject = null;
 		Class listType = null;
 		String listValues = "";
@@ -35,7 +37,8 @@ public class PropertyDecoratorListHandler implements PropertyDecoratorInterface 
 			Matcher matcher = pattern.matcher(value);
 			if (matcher.matches()) {
 				String classValue = matcher.group(1);
-				DataTypeEnum listDataType = DataTypeEnum.valueOf(classValue);
+				DataTypeEnum listDataType = DataTypeEnum.valueOf(classValue
+						.toUpperCase());
 				if (listDataType != null
 						&& listDataType.getListPropertyLoader() != null
 						&& listDataType.getListPropertyLoader().isEligible()) {
@@ -43,7 +46,7 @@ public class PropertyDecoratorListHandler implements PropertyDecoratorInterface 
 							.getListPropertyLoader().getPattern());
 					matcher = pattern.matcher(value);
 					if (matcher.matches()) {
-						listValues = matcher.group(1);
+						listValues = matcher.group(2);
 						if (listValues.endsWith(",")) {
 							listValues = listValues.substring(0,
 									listValues.length());
@@ -59,8 +62,6 @@ public class PropertyDecoratorListHandler implements PropertyDecoratorInterface 
 						+ value);
 			}
 
-		} else {
-			returningObject = value;
 		}
 		return (T) returningObject;
 
@@ -77,16 +78,6 @@ public class PropertyDecoratorListHandler implements PropertyDecoratorInterface 
 	public boolean isCriteriaMetForThisDecorator(String value) {
 		return value.trim().toLowerCase().startsWith("List<")
 				&& value.contains(">[") && value.trim().endsWith("]");
-	}
-
-	private List<String> getPatternList() {
-		List<String> patternList = new ArrayList<String>();
-		patternList.add("List<");
-		patternList.add("?");
-		patternList.add(">[");
-		patternList.add("?");
-		patternList.add("]");
-		return patternList;
 	}
 
 }

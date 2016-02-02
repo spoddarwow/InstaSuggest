@@ -5,8 +5,16 @@ package com.suggesthashtag.propertyloader;
 
 import java.util.Properties;
 
+import com.suggesthashtag.propertyloader.decorateProp.PropertyDecoratorInterface;
+import com.suggesthashtag.propertyloader.decorateProp.PropertyDecoratorListHandler;
+import com.suggesthashtag.propertyloader.decorateProp.PropertyDecoratorValueHandler;
+import com.suggesthashtag.propertyloader.decorateProp.PropertyListHolder;
+import com.suggesthashtag.propertyloader.exception.PropertyException;
+
 /**
  * @author sumitpoddar
+ * 
+ *         TODO: Better design
  *
  */
 public class PropertyFormatUtil {
@@ -22,63 +30,19 @@ public class PropertyFormatUtil {
 	}
 
 	public String formatPropertyValue(String propertyValue,
-			Properties properties) {
-		boolean dynamicPropValOn = false;
-		if (properties == null) {
-			// TODO: Throw exception to load property first.
-		}
-		String propertyValueToRet = propertyValue;
-		StringBuffer formattedPropertyValue = new StringBuffer();
-		if (propertyValue != null && !"".equals(propertyValue)
-				&& propertyValue.contains("${")) {
-			char[] propertyValueChars = propertyValue.toCharArray();
-			int charIndex = 0;
-			StringBuffer dynamicPropValueKey = new StringBuffer();
-			while (charIndex < propertyValueChars.length) {
-				if (propertyValueChars[charIndex] == '$'
-						&& propertyValueChars[charIndex + 1] == '{') {
+			Properties properties) throws PropertyException {
+		PropertyDecoratorInterface deoratorHandler = new PropertyDecoratorValueHandler();
+		propertyValue = deoratorHandler.decorateProperty(propertyValue,
+				properties);
+		return propertyValue;
+	}
 
-					if (dynamicPropValOn) {
-						// Throw Exception
-					} else {
-						dynamicPropValOn = true;
-						charIndex++;
-					}
-				} else if (propertyValueChars[charIndex] == '}') {
-					if (dynamicPropValOn) {
-						dynamicPropValOn = false;
-
-						if (properties.getProperty(dynamicPropValueKey
-								.toString(), System
-								.getProperty(dynamicPropValueKey.toString())) != null) {
-							formattedPropertyValue.append(formatPropertyValue(
-									properties.getProperty(dynamicPropValueKey
-											.toString(), System
-											.getProperty(dynamicPropValueKey
-													.toString())), properties));
-						} else {
-							formattedPropertyValue.append("${")
-									.append(dynamicPropValueKey).append("}");
-						}
-
-						dynamicPropValueKey = new StringBuffer();
-					} else {
-						formattedPropertyValue
-								.append(propertyValueChars[charIndex]);
-					}
-
-				} else if (dynamicPropValOn) {
-					dynamicPropValueKey.append(propertyValueChars[charIndex]);
-				} else if (!dynamicPropValOn) {
-					formattedPropertyValue
-							.append(propertyValueChars[charIndex]);
-				}
-				charIndex++;
-			}
-			propertyValueToRet = formattedPropertyValue.toString();
-		}
-
-		return propertyValueToRet;
-
+	public PropertyListHolder formatPropertyValueForListType(
+			String propertyValue, Properties properties)
+			throws PropertyException {
+		PropertyListHolder holder = null;
+		PropertyDecoratorInterface deoratorHandler = new PropertyDecoratorListHandler();
+		holder = deoratorHandler.decorateProperty(propertyValue, properties);
+		return holder;
 	}
 }

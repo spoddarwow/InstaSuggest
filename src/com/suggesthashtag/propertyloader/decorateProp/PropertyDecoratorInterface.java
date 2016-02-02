@@ -3,6 +3,8 @@
  */
 package com.suggesthashtag.propertyloader.decorateProp;
 
+import java.util.Properties;
+
 import com.suggesthashtag.propertyloader.exception.PropertyException;
 
 /**
@@ -13,5 +15,6 @@ public interface PropertyDecoratorInterface {
 
 	boolean isCriteriaMetForThisDecorator(String value);
 
-	<T> T decorateProperty(String value) throws PropertyException;
+	<T> T decorateProperty(String value, Properties properties)
+			throws PropertyException;
 }

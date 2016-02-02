@@ -22,6 +22,7 @@ import com.suggesthashtag.propertyloader.datatype.BasicIntegerType;
 import com.suggesthashtag.propertyloader.datatype.BasicStringType;
 import com.suggesthashtag.propertyloader.datatype.DataTypeEnum;
 import com.suggesthashtag.propertyloader.decorateProp.PropertyListHolder;
+import com.suggesthashtag.propertyloader.decorateProp.PropertyLoaderObject;
 import com.suggesthashtag.propertyloader.decorateProp.PropertyValueDecoratorThread;
 import com.suggesthashtag.propertyloader.exception.PropertyException;
 
@@ -49,22 +50,26 @@ public final class PropertyLoader {
 			List<PropertyLoaderDetails> propFileDetailList)
 			throws InterruptedException, ExecutionException {
 		property = new Property();
-		Set<Future<Property>> set = new HashSet<Future<Property>>();
+		Set<Future<PropertyLoaderObject>> set = new HashSet<Future<PropertyLoaderObject>>();
 		long start = System.currentTimeMillis();
 		ExecutorService executorPool = Executors
 				.newFixedThreadPool(propFileDetailList.size());
 
 		for (int index = 0; index < propFileDetailList.size(); index++) {
 
-			Future<Property> future = executorPool
+			Future<PropertyLoaderObject> future = executorPool
 					.submit(new PropertyValueDecoratorThread(propFileDetailList
 							.get(index), index));
 			set.add(future);
 		}
 		Property propertyTemp = new Property();
-		for (Future<Property> future : set) {
+		for (Future<PropertyLoaderObject> future : set) {
 			// propertyTemp.putAll(future.get());
-			this.property.putAll(future.get());
+			PropertyLoaderObject object = future.get();
+
+			listDecorateMap.putAll(object.getListHolderMap());
+
+			this.property.putAll(object.getTempProperty());
 		}
 		System.out.println("listDecorateMap : " + listDecorateMap);
 		/*
