@@ -3,14 +3,19 @@
  */
 package com.suggesthashtag.instaapi;
 
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 
+import org.apache.commons.configuration2.CombinedConfiguration;
+import org.apache.commons.configuration2.Configuration;
+import org.apache.commons.configuration2.FileBasedConfiguration;
+import org.apache.commons.configuration2.PropertiesConfiguration;
+import org.apache.commons.configuration2.builder.FileBasedConfigurationBuilder;
+import org.apache.commons.configuration2.builder.combined.CombinedConfigurationBuilder;
+import org.apache.commons.configuration2.builder.fluent.Parameters;
+import org.apache.commons.configuration2.convert.DefaultListDelimiterHandler;
+import org.apache.commons.configuration2.ex.ConfigurationException;
 import org.apache.log4j.Logger;
 
-import com.google.gson.Gson;
-import com.suggesthashtag.instaapi.response.bean.MediaPopularResponse;
 import com.suggesthashtag.logger.LoggerLevel;
 
 /**
@@ -24,13 +29,41 @@ public class Demo {
 	 * @throws IOException
 	 */
 	public static void main(String[] args) throws IOException {
-		String authResponse = "";
-		Gson gson = new Gson();
-		MediaPopularResponse root = gson.fromJson(new FileReader(new File("/Volumes/Seagate Expansion Drive/Sumit/My Work/Git/SuggestHashTag/src/com/suggesthashtag/instaapi/mediapopular/sampleResponse")),
-				MediaPopularResponse.class);
-		System.out.println(root);
-	}
+		Parameters params = new Parameters();
+		CombinedConfigurationBuilder builder = new CombinedConfigurationBuilder()
+				.configure(
+						params.properties()
+								.setFileName("mediaPopular.properties")
+								.setListDelimiterHandler(
+										new DefaultListDelimiterHandler(',')))
+				.configure(
+						params.properties()
+								.setFileName("demo.properties")
+								.setListDelimiterHandler(
+										new DefaultListDelimiterHandler(',')));
 
+		/*
+		 * FileBasedConfigurationBuilder<FileBasedConfiguration> builder = new
+		 * FileBasedConfigurationBuilder<FileBasedConfiguration>(
+		 * PropertiesConfiguration.class).configure( params.properties()
+		 * .setFileName("mediaPopular.properties") .setListDelimiterHandler( new
+		 * DefaultListDelimiterHandler(','))) .configure( params.properties()
+		 * .setFileName("demo.properties") .setListDelimiterHandler( new
+		 * DefaultListDelimiterHandler(',')));
+		 */
+		try {
+			CombinedConfiguration config = builder.getConfiguration();
+			System.out.println(config.getString("proxy.type"));
+			String[] array = config.getStringArray("db.class_load_1");
+			System.out.println(config.getString("newurl"));
+			for (String value : array) {
+				System.out.println(value);
+			}
+
+		} catch (ConfigurationException cex) {
+			// loading of the configuration file failed
+		}
+	}
 }
 
 class DemoThread implements Runnable {
