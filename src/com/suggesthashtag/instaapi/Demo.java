@@ -3,6 +3,7 @@
  */
 package com.suggesthashtag.instaapi;
 
+import java.io.File;
 import java.io.IOException;
 
 import org.apache.commons.configuration2.CombinedConfiguration;
@@ -31,31 +32,15 @@ public class Demo {
 	public static void main(String[] args) throws IOException {
 		Parameters params = new Parameters();
 		CombinedConfigurationBuilder builder = new CombinedConfigurationBuilder()
-				.configure(
-						params.properties()
-								.setFileName("mediaPopular.properties")
-								.setListDelimiterHandler(
-										new DefaultListDelimiterHandler(',')))
-				.configure(
-						params.properties()
-								.setFileName("demo.properties")
-								.setListDelimiterHandler(
-										new DefaultListDelimiterHandler(',')));
-
-		/*
-		 * FileBasedConfigurationBuilder<FileBasedConfiguration> builder = new
-		 * FileBasedConfigurationBuilder<FileBasedConfiguration>(
-		 * PropertiesConfiguration.class).configure( params.properties()
-		 * .setFileName("mediaPopular.properties") .setListDelimiterHandler( new
-		 * DefaultListDelimiterHandler(','))) .configure( params.properties()
-		 * .setFileName("demo.properties") .setListDelimiterHandler( new
-		 * DefaultListDelimiterHandler(',')));
-		 */
+				.configure(params.fileBased().setFile(new File("config.xml")));
+		
 		try {
 			CombinedConfiguration config = builder.getConfiguration();
 			System.out.println(config.getString("proxy.type"));
-			String[] array = config.getStringArray("db.class_load_1");
+			String[] array = config.getStringArray("db.class_load");
 			System.out.println(config.getString("newurl"));
+
+			System.out.println(config.getString("db.class_load_1"));
 			for (String value : array) {
 				System.out.println(value);
 			}
