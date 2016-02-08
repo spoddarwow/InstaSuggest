@@ -86,6 +86,12 @@ public final class PropertyLoader {
 				+ (System.currentTimeMillis() - start));
 	}
 
+	private void propertyLoading(List<PropertyLoaderDetails> propFileDetailList) {
+		property = new Property();
+		
+
+	}
+
 	public synchronized HashMap<String, ArrayList<PropertyListHolder>> getPropertyListHolder() {
 		return listDecorateMap;
 	}

@@ -7,15 +7,11 @@ import java.io.File;
 import java.io.IOException;
 
 import org.apache.commons.configuration2.CombinedConfiguration;
-import org.apache.commons.configuration2.Configuration;
-import org.apache.commons.configuration2.FileBasedConfiguration;
-import org.apache.commons.configuration2.PropertiesConfiguration;
-import org.apache.commons.configuration2.builder.FileBasedConfigurationBuilder;
 import org.apache.commons.configuration2.builder.combined.CombinedConfigurationBuilder;
 import org.apache.commons.configuration2.builder.fluent.Parameters;
-import org.apache.commons.configuration2.convert.DefaultListDelimiterHandler;
 import org.apache.commons.configuration2.ex.ConfigurationException;
 import org.apache.log4j.Logger;
+import org.hibernate.internal.util.config.ConfigurationHelper;
 
 import com.suggesthashtag.logger.LoggerLevel;
 
@@ -33,7 +29,6 @@ public class Demo {
 		Parameters params = new Parameters();
 		CombinedConfigurationBuilder builder = new CombinedConfigurationBuilder()
 				.configure(params.fileBased().setFile(new File("config.xml")));
-		
 		try {
 			CombinedConfiguration config = builder.getConfiguration();
 			System.out.println(config.getString("proxy.type"));
