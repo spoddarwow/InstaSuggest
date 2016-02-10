@@ -6,10 +6,10 @@ package com.suggesthashtag.propertyloader.propertyDecorator;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Properties;
 
 import com.suggesthashtag.propertyloader.Property;
 import com.suggesthashtag.propertyloader.PropertyLoaderDetails;
+import com.suggesthashtag.propertyloader.decorateProp.PropertyLoaderObject;
 
 /**
  * @author sumitpoddar
@@ -18,7 +18,7 @@ import com.suggesthashtag.propertyloader.PropertyLoaderDetails;
 public class PropertyDecoratorObject {
 
 	private List<PropertyLoaderDetails> propertyLoaderList = new ArrayList<PropertyLoaderDetails>();
-	private HashMap<String, Properties> processingPropertiesMap = new HashMap<String, Properties>();
+	private HashMap<String, PropertyLoaderObject> processingPropertiesMap = new HashMap<String, PropertyLoaderObject>();
 	private Property finalProperty = new Property();
 
 	/**
@@ -27,13 +27,9 @@ public class PropertyDecoratorObject {
 	 * @param finalProperty
 	 */
 	public PropertyDecoratorObject(
-			List<PropertyLoaderDetails> propertyLoaderList,
-			HashMap<String, Properties> processingPropertiesMap,
-			Property finalProperty) {
+			List<PropertyLoaderDetails> propertyLoaderList) {
 		super();
 		this.propertyLoaderList = propertyLoaderList;
-		this.processingPropertiesMap = processingPropertiesMap;
-		this.finalProperty = finalProperty;
 	}
 
 	public List<PropertyLoaderDetails> getPropertyLoaderList() {
@@ -45,12 +41,12 @@ public class PropertyDecoratorObject {
 		this.propertyLoaderList = propertyLoaderList;
 	}
 
-	public HashMap<String, Properties> getProcessingPropertiesMap() {
+	public HashMap<String, PropertyLoaderObject> getProcessingPropertiesMap() {
 		return this.processingPropertiesMap;
 	}
 
 	public void setProcessingPropertiesMap(
-			HashMap<String, Properties> processingPropertiesMap) {
+			HashMap<String, PropertyLoaderObject> processingPropertiesMap) {
 		this.processingPropertiesMap = processingPropertiesMap;
 	}
 

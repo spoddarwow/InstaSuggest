@@ -3,12 +3,11 @@
  */
 package com.suggesthashtag.propertyloader.propertyDecorator;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
+import java.util.Iterator;
+import java.util.Set;
 
 import com.suggesthashtag.propertyloader.Property;
-import com.suggesthashtag.propertyloader.PropertyLoader;
+import com.suggesthashtag.propertyloader.PropertyFormatUtil;
 import com.suggesthashtag.propertyloader.PropertyLoaderDetails;
 import com.suggesthashtag.propertyloader.decorateProp.PropertyLoaderObject;
 
@@ -16,7 +15,7 @@ import com.suggesthashtag.propertyloader.decorateProp.PropertyLoaderObject;
  * @author sumitpoddar
  *
  */
-public class LoadPropertyFromFilePropDecorator extends
+public class PrepareListHandlerPropDecorator extends
 		PropertyDecoratorImplementation {
 
 	private PropertyDecoratorInterface decoratorInterface;
@@ -33,7 +32,7 @@ public class LoadPropertyFromFilePropDecorator extends
 	/**
 	 * @param decoratorInterface
 	 */
-	public LoadPropertyFromFilePropDecorator(
+	public PrepareListHandlerPropDecorator(
 			PropertyDecoratorInterface decoratorInterface) {
 		super(decoratorInterface);
 		this.decoratorInterface = decoratorInterface;
@@ -57,34 +56,36 @@ public class LoadPropertyFromFilePropDecorator extends
 					.getPropertyLoaderList().size(); index++) {
 				PropertyLoaderDetails propertyFile = decoratingObject
 						.getPropertyLoaderList().get(index);
-				PropertyLoaderObject loaderObject = new PropertyLoaderObject();
-				loaderObject.setIndex(index);
-				Property tempProperty = new Property();
-				try {
-					InputStream inputStream = PropertyLoader.class
-							.getClassLoader().getResourceAsStream(
-									propertyFile.toString());
-					if (inputStream != null) {
-						tempProperty.load(inputStream);
-						loaderObject.setTempProperty(tempProperty);
-					} else {
-						throw new FileNotFoundException("Property file "
-								+ propertyFile.toString()
-								+ " not found in the classpath");
-					}
-					decoratingObject.getProcessingPropertiesMap().put(
-							propertyFile.toString(), loaderObject);
-				} catch (FileNotFoundException exception) {
-					exception.printStackTrace();
-				} catch (IOException exception) {
-					exception.printStackTrace();
-				}
+				PropertyLoaderObject propLoaderObject = decoratingObject
+						.getProcessingPropertiesMap().get(
+								propertyFile.toString());
+				if (propLoaderObject != null
+						&& propLoaderObject.getTempProperty() != null
+						&& propLoaderObject.getTempProperty().size() > 0) {
+					Property property = propLoaderObject.getTempProperty();
+					Set<Object> keySet = property.keySet();
+					Iterator<Object> keySetIterator = keySet.iterator();
+					while (keySetIterator.hasNext()) {
+						String key = (String) keySetIterator.next();
+						String propValue = property.getProperty(key);
+						if (propValue.toUpperCase().startsWith("LIST<")) {
 
+							/*
+							 * listHolderMap.put( key,
+							 * PropertyFormatUtil.getInstance()
+							 * .formatPropertyValueForListType(
+							 * property.getProperty(key), property));
+							 */
+						} else {
+							decoratingObject.getFinalProperty().setProperty(
+									key, property.getProperty(key));
+						}
+					}
+				}
 			}
 
 		}
 
 		return decoratingObject;
 	}
-
 }

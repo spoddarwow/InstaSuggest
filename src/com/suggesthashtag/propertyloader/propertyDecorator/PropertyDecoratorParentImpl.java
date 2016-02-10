@@ -14,10 +14,8 @@ public class PropertyDecoratorParentImpl implements PropertyDecoratorInterface {
 	/**
 	 * @param thisPropertyDecoratorObject
 	 */
-	public PropertyDecoratorParentImpl(
-			PropertyDecoratorObject thisPropertyDecoratorObject) {
+	public PropertyDecoratorParentImpl() {
 		super();
-		this.thisPropertyDecoratorObject = thisPropertyDecoratorObject;
 	}
 
 	/*

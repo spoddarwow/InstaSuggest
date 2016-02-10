@@ -25,6 +25,11 @@ import com.suggesthashtag.propertyloader.decorateProp.PropertyListHolder;
 import com.suggesthashtag.propertyloader.decorateProp.PropertyLoaderObject;
 import com.suggesthashtag.propertyloader.decorateProp.PropertyValueDecoratorThread;
 import com.suggesthashtag.propertyloader.exception.PropertyException;
+import com.suggesthashtag.propertyloader.propertyDecorator.LoadPropertyFromFilePropDecorator;
+import com.suggesthashtag.propertyloader.propertyDecorator.PrepareListHandlerPropDecorator;
+import com.suggesthashtag.propertyloader.propertyDecorator.PropertyDecoratorInterface;
+import com.suggesthashtag.propertyloader.propertyDecorator.PropertyDecoratorObject;
+import com.suggesthashtag.propertyloader.propertyDecorator.PropertyDecoratorParentImpl;
 
 /**
  * @author sumitpoddar
@@ -50,45 +55,22 @@ public final class PropertyLoader {
 			List<PropertyLoaderDetails> propFileDetailList)
 			throws InterruptedException, ExecutionException {
 		property = new Property();
-		Set<Future<PropertyLoaderObject>> set = new HashSet<Future<PropertyLoaderObject>>();
+		PropertyDecoratorObject decoratorObject = new PropertyDecoratorObject(
+				propFileDetailList);
+
 		long start = System.currentTimeMillis();
-		ExecutorService executorPool = Executors
-				.newFixedThreadPool(propFileDetailList.size());
-
-		for (int index = 0; index < propFileDetailList.size(); index++) {
-
-			Future<PropertyLoaderObject> future = executorPool
-					.submit(new PropertyValueDecoratorThread(propFileDetailList
-							.get(index), index));
-			set.add(future);
-		}
-		Property propertyTemp = new Property();
-		for (Future<PropertyLoaderObject> future : set) {
-			// propertyTemp.putAll(future.get());
-			PropertyLoaderObject object = future.get();
-
-			listDecorateMap.putAll(object.getListHolderMap());
-
-			this.property.putAll(object.getTempProperty());
-		}
-		System.out.println("listDecorateMap : " + listDecorateMap);
-		/*
-		 * if (propertyTemp != null && propertyTemp.size() > 0) { Set<Object>
-		 * keySet = propertyTemp.keySet(); Iterator<Object> keySetIterator =
-		 * keySet.iterator(); while (keySetIterator.hasNext()) { String key =
-		 * (String) keySetIterator.next(); String propValue =
-		 * PropertyFormatUtil.getInstance()
-		 * .formatPropertyValue(propertyTemp.getProperty(key), propertyTemp);
-		 * this.property.setProperty(key, propValue); } }
-		 */
-
+		PropertyDecoratorInterface propertyDecorator = new PrepareListHandlerPropDecorator(
+				new LoadPropertyFromFilePropDecorator(
+						new PropertyDecoratorParentImpl()));
+		decoratorObject = propertyDecorator
+				.processPropertyFiles(decoratorObject);
+		System.out.println(propertyDecorator);
 		System.out.println("Time to load : "
 				+ (System.currentTimeMillis() - start));
 	}
 
 	private void propertyLoading(List<PropertyLoaderDetails> propFileDetailList) {
 		property = new Property();
-		
 
 	}
 
