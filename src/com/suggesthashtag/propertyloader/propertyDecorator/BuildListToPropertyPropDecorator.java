@@ -3,12 +3,13 @@
  */
 package com.suggesthashtag.propertyloader.propertyDecorator;
 
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
-import com.suggesthashtag.propertyloader.Property;
-import com.suggesthashtag.propertyloader.PropertyFormatUtil;
 import com.suggesthashtag.propertyloader.PropertyLoaderDetails;
+import com.suggesthashtag.propertyloader.decorateProp.PropertyListHolder;
 import com.suggesthashtag.propertyloader.decorateProp.PropertyLoaderObject;
 import com.suggesthashtag.propertyloader.exception.PropertyException;
 
@@ -16,7 +17,7 @@ import com.suggesthashtag.propertyloader.exception.PropertyException;
  * @author sumitpoddar
  *
  */
-public class PrepareListHandlerPropDecorator extends
+public class BuildListToPropertyPropDecorator extends
 		PropertyDecoratorImplementation {
 
 	private PropertyDecoratorInterface decoratorInterface;
@@ -33,7 +34,7 @@ public class PrepareListHandlerPropDecorator extends
 	/**
 	 * @param decoratorInterface
 	 */
-	public PrepareListHandlerPropDecorator(
+	public BuildListToPropertyPropDecorator(
 			PropertyDecoratorInterface decoratorInterface) {
 		super(decoratorInterface);
 		this.decoratorInterface = decoratorInterface;
@@ -61,28 +62,38 @@ public class PrepareListHandlerPropDecorator extends
 						.getProcessingPropertiesMap().get(
 								propertyFile.toString());
 				if (propLoaderObject != null
-						&& propLoaderObject.getTempProperty() != null
-						&& propLoaderObject.getTempProperty().size() > 0) {
-					Property property = propLoaderObject.getTempProperty();
-					Set<Object> keySet = property.keySet();
-					Iterator<Object> keySetIterator = keySet.iterator();
+						&& propLoaderObject.getListHolderMap() != null
+						&& propLoaderObject.getListHolderMap().size() > 0) {
+					HashMap<String, PropertyListHolder> propertyListHolder = propLoaderObject
+							.getListHolderMap();
+					Set<String> keySet = propertyListHolder.keySet();
+					Iterator<String> keySetIterator = keySet.iterator();
 					while (keySetIterator.hasNext()) {
 						String key = (String) keySetIterator.next();
-						String propValue = property.getProperty(key);
-						if (propValue.toUpperCase().startsWith("LIST<")) {
-							propLoaderObject.getListHolderMap().put(
-									key,
-									PropertyFormatUtil.getInstance()
-											.formatPropertyValueForListType(
-													property.getProperty(key),
-													property));
-						} else {
-							decoratingObject.getFinalProperty().setProperty(
-									key, property.getProperty(key));
+						PropertyListHolder propListValue = propertyListHolder
+								.get(key);
+						if (propListValue.getListTypeClass() != null
+								&& propListValue.getValues() != null) {
+							List valueAsList = (List) decoratingObject
+									.getFinalProperty().get(key);
+							if (valueAsList == null) {
+								valueAsList = propListValue.getListTypeClass()
+										.getListPropertyLoader()
+										.initializeArrayList();
+							}
+							String listValues = propListValue.getValues();
+							String[] listValueSplit = listValues.split(",");
+							for (String listValue : listValueSplit) {
+								valueAsList.add(propListValue
+										.getListTypeClass()
+										.getParserDataTypeClass()
+										.getValue(listValue.trim()));
+							}
+							decoratingObject.getFinalProperty().put(key,
+									valueAsList);
 						}
+
 					}
-					decoratingObject.getProcessingPropertiesMap().put(
-							propertyFile.toString(), propLoaderObject);
 				}
 			}
 

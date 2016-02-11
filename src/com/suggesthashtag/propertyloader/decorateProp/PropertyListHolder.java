@@ -3,28 +3,32 @@
  */
 package com.suggesthashtag.propertyloader.decorateProp;
 
+import com.suggesthashtag.propertyloader.datatype.DataTypeEnum;
+
 /**
  * @author sumitpoddar
  *
  */
 public class PropertyListHolder {
 
-	private Class listTypeClass;
+	private DataTypeEnum listTypeClass;
 	private String values;
 
 	/**
 	 * @param listTypeClass
 	 * @param values
 	 */
-	public PropertyListHolder(Class listTypeClass, String listValues) {
+	public PropertyListHolder(DataTypeEnum listTypeClass, String listValues) {
 		super();
+		this.listTypeClass = listTypeClass;
+		this.values = listValues;
 	}
 
-	public Class getListTypeClass() {
+	public DataTypeEnum getListTypeClass() {
 		return this.listTypeClass;
 	}
 
-	public void setListTypeClass(Class listTypeClass) {
+	public void setListTypeClass(DataTypeEnum listTypeClass) {
 		this.listTypeClass = listTypeClass;
 	}
 

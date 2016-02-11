@@ -15,23 +15,29 @@ import com.suggesthashtag.propertyloader.listPropertyLoader.StringListPropertyLo
  */
 public enum DataTypeEnum {
 
-	INTEGER(Integer.class, new IntegerListPropertyLoader()), DOUBLE(
-			Double.class, new IntegerListPropertyLoader()), BOOLEAN(
-			Boolean.class, new IntegerListPropertyLoader()), STRING(
-			String.class, new StringListPropertyLoader()), FLOAT(Float.class,
-			new IntegerListPropertyLoader()), LIST(List.class, null);
+	INTEGER(Integer.class, new IntegerListPropertyLoader(),
+			new BasicIntegerType()), DOUBLE(Double.class,
+			new IntegerListPropertyLoader(), new BasicDoubleType()), BOOLEAN(
+			Boolean.class, new IntegerListPropertyLoader(),
+			new BasicBooleanType()), STRING(String.class,
+			new StringListPropertyLoader(), new BasicStringType()), FLOAT(
+			Float.class, new IntegerListPropertyLoader(), new BasicFloatType()), LIST(
+			List.class, null, null);
 
 	private Class dataTypeClass;
 	private ListPropertyLoaderInterface listPropertyLoader;
+	private AbstractDataType parserDataTypeClass;
 
 	/**
 	 * @param dataTypeClass
 	 * @param listPropertyLoader
 	 */
 	private DataTypeEnum(Class dataTypeClass,
-			ListPropertyLoaderInterface listPropertyLoader) {
+			ListPropertyLoaderInterface listPropertyLoader,
+			AbstractDataType parserDataTypeClass) {
 		this.dataTypeClass = dataTypeClass;
 		this.listPropertyLoader = listPropertyLoader;
+		this.parserDataTypeClass = parserDataTypeClass;
 	}
 
 	public Class getDataTypeClass() {
@@ -49,6 +55,14 @@ public enum DataTypeEnum {
 	public void setListPropertyLoader(
 			ListPropertyLoaderInterface listPropertyLoader) {
 		this.listPropertyLoader = listPropertyLoader;
+	}
+
+	public AbstractDataType getParserDataTypeClass() {
+		return this.parserDataTypeClass;
+	}
+
+	public void setParserDataTypeClass(AbstractDataType parserDataTypeClass) {
+		this.parserDataTypeClass = parserDataTypeClass;
 	}
 
 }

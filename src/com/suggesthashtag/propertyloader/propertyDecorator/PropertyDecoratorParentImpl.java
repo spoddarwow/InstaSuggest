@@ -3,6 +3,8 @@
  */
 package com.suggesthashtag.propertyloader.propertyDecorator;
 
+import com.suggesthashtag.propertyloader.exception.PropertyException;
+
 /**
  * @author sumitpoddar
  *
@@ -26,7 +28,7 @@ public class PropertyDecoratorParentImpl implements PropertyDecoratorInterface {
 	 */
 	@Override
 	public PropertyDecoratorObject processPropertyFiles(
-			PropertyDecoratorObject decoratingObject) {
+			PropertyDecoratorObject decoratingObject) throws PropertyException {
 		// TODO Auto-generated method stub
 		return decoratingObject;
 	}

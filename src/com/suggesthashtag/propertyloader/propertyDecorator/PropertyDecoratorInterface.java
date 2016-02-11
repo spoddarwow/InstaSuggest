@@ -3,6 +3,8 @@
  */
 package com.suggesthashtag.propertyloader.propertyDecorator;
 
+import com.suggesthashtag.propertyloader.exception.PropertyException;
+
 /**
  * @author sumitpoddar
  *
@@ -10,5 +12,5 @@ package com.suggesthashtag.propertyloader.propertyDecorator;
 public interface PropertyDecoratorInterface {
 
 	PropertyDecoratorObject processPropertyFiles(
-			PropertyDecoratorObject decoratingObject);
+			PropertyDecoratorObject decoratingObject) throws PropertyException;
 }

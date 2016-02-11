@@ -25,6 +25,8 @@ import com.suggesthashtag.propertyloader.decorateProp.PropertyListHolder;
 import com.suggesthashtag.propertyloader.decorateProp.PropertyLoaderObject;
 import com.suggesthashtag.propertyloader.decorateProp.PropertyValueDecoratorThread;
 import com.suggesthashtag.propertyloader.exception.PropertyException;
+import com.suggesthashtag.propertyloader.propertyDecorator.BuildListToPropertyPropDecorator;
+import com.suggesthashtag.propertyloader.propertyDecorator.BuildPropertyValuesPropDecorator;
 import com.suggesthashtag.propertyloader.propertyDecorator.LoadPropertyFromFilePropDecorator;
 import com.suggesthashtag.propertyloader.propertyDecorator.PrepareListHandlerPropDecorator;
 import com.suggesthashtag.propertyloader.propertyDecorator.PropertyDecoratorInterface;
@@ -53,18 +55,20 @@ public final class PropertyLoader {
 
 	private void propertyLoadingThread(
 			List<PropertyLoaderDetails> propFileDetailList)
-			throws InterruptedException, ExecutionException {
+			throws InterruptedException, ExecutionException, PropertyException {
 		property = new Property();
 		PropertyDecoratorObject decoratorObject = new PropertyDecoratorObject(
 				propFileDetailList);
 
 		long start = System.currentTimeMillis();
-		PropertyDecoratorInterface propertyDecorator = new PrepareListHandlerPropDecorator(
-				new LoadPropertyFromFilePropDecorator(
-						new PropertyDecoratorParentImpl()));
+		PropertyDecoratorInterface propertyDecorator = new BuildListToPropertyPropDecorator(
+				new BuildPropertyValuesPropDecorator(
+						new PrepareListHandlerPropDecorator(
+								new LoadPropertyFromFilePropDecorator(
+										new PropertyDecoratorParentImpl()))));
 		decoratorObject = propertyDecorator
 				.processPropertyFiles(decoratorObject);
-		System.out.println(propertyDecorator);
+		property = decoratorObject.getFinalProperty();
 		System.out.println("Time to load : "
 				+ (System.currentTimeMillis() - start));
 	}

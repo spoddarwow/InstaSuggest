@@ -3,6 +3,8 @@
  */
 package com.suggesthashtag.propertyloader.propertyDecorator;
 
+import com.suggesthashtag.propertyloader.exception.PropertyException;
+
 /**
  * @author sumitpoddar
  *
@@ -38,8 +40,8 @@ public class PropertyDecoratorImplementation implements
 	 */
 	@Override
 	public PropertyDecoratorObject processPropertyFiles(
-			PropertyDecoratorObject decoratingObject) {
-		return decoratingObject;
+			PropertyDecoratorObject decoratingObject) throws PropertyException {
+		return decoratorInterface.processPropertyFiles(decoratingObject);
 	}
 
 }

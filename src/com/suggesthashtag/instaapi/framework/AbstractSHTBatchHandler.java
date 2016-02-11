@@ -40,6 +40,7 @@ public abstract class AbstractSHTBatchHandler extends SHTMainApp {
 			loadPropertyFile();
 			System.out.println("Value : "+this.propertyLoader.getString("log4j.appender.FILE.File"));
 			System.out.println("Value : "+this.propertyLoader.getString("instaapi.url"));
+			List<String> listString = this.propertyLoader.getli
 			init(propertyLoader.getProperty());
 			log("Properties file(s) loaded. Starting with execution of the process.");
 			execute();

@@ -11,6 +11,7 @@ import com.suggesthashtag.propertyloader.Property;
 import com.suggesthashtag.propertyloader.PropertyLoader;
 import com.suggesthashtag.propertyloader.PropertyLoaderDetails;
 import com.suggesthashtag.propertyloader.decorateProp.PropertyLoaderObject;
+import com.suggesthashtag.propertyloader.exception.PropertyException;
 
 /**
  * @author sumitpoddar
@@ -49,7 +50,7 @@ public class LoadPropertyFromFilePropDecorator extends
 	 */
 	@Override
 	public PropertyDecoratorObject processPropertyFiles(
-			PropertyDecoratorObject decoratingObject) {
+			PropertyDecoratorObject decoratingObject) throws PropertyException {
 		decoratingObject = super.processPropertyFiles(decoratingObject);
 		if (decoratingObject != null
 				&& !decoratingObject.getPropertyLoaderList().isEmpty()) {

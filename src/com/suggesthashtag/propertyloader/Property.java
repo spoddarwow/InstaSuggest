@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+import com.suggesthashtag.propertyloader.exception.PropertyException;
+
 /**
  * @author sumitpoddar
  *
@@ -25,20 +27,27 @@ public class Property extends Properties {
 
 	@Override
 	public String getProperty(String propertyKey) {
-		return extractNFormatPropertyValue(propertyKey,
-				super.getProperty(propertyKey));
-		// return super.getProperty(propertyKey);
+		return super.getProperty(propertyKey);
 	}
 
 	@Override
 	public String getProperty(String propertyKey, String defaultPropValue) {
-		return extractNFormatPropertyValue(propertyKey,
-				super.getProperty(propertyKey, defaultPropValue));
-		// return super.getProperty(propertyKey, defaultPropValue);
+		return super.getProperty(propertyKey, defaultPropValue);
 	}
 
-	private String extractNFormatPropertyValue(String propertyKey,
-			String propValue) {
+	public String extractNFormatPropertyValue(String propertyKey)
+			throws PropertyException {
+		String propValue = getProperty(propertyKey);
+		if (propValue != null) {
+			propValue = PropertyFormatUtil.getInstance().formatPropertyValue(
+					propValue, this);
+		}
+		return propValue;
+	}
+
+	public String extractNFormatPropertyValue(String propertyKey,
+			String defPropValue) throws PropertyException {
+		String propValue = getProperty(propertyKey);
 		if (propValue != null && propValue.contains("${")) {
 			propValue = PropertyFormatUtil.getInstance().formatPropertyValue(
 					propValue, this);
