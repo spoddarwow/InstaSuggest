@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-import com.suggesthashtag.logger.BatchLogManager;
+import com.suggesthashtag.db.exception.DBException;
+import com.suggesthashtag.db.hibernate.DBConnectionInit;
 import com.suggesthashtag.logger.exception.LoggerException;
 import com.suggesthashtag.propertyloader.PropertyLoader;
 import com.suggesthashtag.propertyloader.PropertyLoaderDetails;
@@ -38,10 +39,9 @@ public abstract class AbstractSHTBatchHandler extends SHTMainApp {
 					.println("Command Line arguments loaded. Starting with loading properties file(s)");
 			propertyLoader = new PropertyLoader();
 			loadPropertyFile();
-			System.out.println("Value : "+this.propertyLoader.getString("log4j.appender.FILE.File"));
-			System.out.println("Value : "+this.propertyLoader.getString("instaapi.url"));
-			List<String> listString = this.propertyLoader.getli
-			init(propertyLoader.getProperty());
+			initLogger(propertyLoader.getProperty());
+			log("Properties file(s) loaded. Starting with execution of the process.");
+			DBConnectionInit.getInstance(propertyLoader);
 			log("Properties file(s) loaded. Starting with execution of the process.");
 			execute();
 			log("Execution complete.");
@@ -56,6 +56,12 @@ public abstract class AbstractSHTBatchHandler extends SHTMainApp {
 			// TODO Auto-generated catch block
 			exception.printStackTrace();
 		} catch (ExecutionException exception) {
+			// TODO Auto-generated catch block
+			exception.printStackTrace();
+		} catch (DBException exception) {
+			// TODO Auto-generated catch block
+			exception.printStackTrace();
+		} catch (ClassNotFoundException exception) {
 			// TODO Auto-generated catch block
 			exception.printStackTrace();
 		}
@@ -104,4 +110,5 @@ public abstract class AbstractSHTBatchHandler extends SHTMainApp {
 	public abstract PropertyLoaderDetails getPropertyLoadDetails();
 
 	public abstract List<PropertyLoaderDetails> getPropertyLoadDetailsList();
+
 }

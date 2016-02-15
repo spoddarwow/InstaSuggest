@@ -48,7 +48,7 @@ public abstract class LogManager {
 	/**
 	 * To be implemented as improvement.
 	 */
-	public void init(Properties loggerPropertyConf) throws LoggerException {
+	public void initLogger(Properties loggerPropertyConf) throws LoggerException {
 		if (batchName == null || "".equals(batchName)) {
 			throw new LoggerException(
 					"BatchName cannot be null/empty. It is used for logger reference.");

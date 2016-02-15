@@ -98,15 +98,6 @@ public class SHTMediaPopularRequestHandler extends AbstractSHTBatchHandler {
 		}
 	}
 
-	protected ArrayList<PropertyLoaderDetails> getALlMainPropertyFiles() {
-		ArrayList<PropertyLoaderDetails> tempList = new ArrayList<PropertyLoaderDetails>();
-		tempList.add(new PropertyLoaderDetails("batchMain.properties", false));
-		tempList.add(new PropertyLoaderDetails("db.properties", false));
-		tempList.add(new PropertyLoaderDetails("demo.properties", false));
-		tempList.add(new PropertyLoaderDetails("mainApplog4j.properties", false));
-		return tempList;
-	}
-
 	/*
 	 * (non-Javadoc)
 	 * 
