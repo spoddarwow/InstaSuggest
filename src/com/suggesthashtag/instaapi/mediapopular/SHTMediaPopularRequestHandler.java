@@ -12,7 +12,6 @@ import java.util.concurrent.ExecutionException;
 import org.apache.http.HttpException;
 
 import com.suggesthashtag.db.hibernate.DBConnectionInit;
-import com.suggesthashtag.db.hibernate.domain.Student;
 import com.suggesthashtag.instaapi.framework.AbstractSHTBatchHandler;
 import com.suggesthashtag.instaapi.framework.SHTBatchUtil;
 import com.suggesthashtag.instaapi.framework.annotation.ApiBatchAnnotaion;

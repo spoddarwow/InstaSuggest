@@ -18,7 +18,7 @@ import com.suggesthashtag.propertyloader.exception.PropertyException;
  */
 public class DBConnectionInit {
 
-	private static DBConnectionInit MY_INSTANCE = new DBConnectionInit();
+	private static DBConnectionInit MY_INSTANCE = null;
 	private static SessionFactory factory = null;
 
 	private DBConnectionInit() {
@@ -48,13 +48,18 @@ public class DBConnectionInit {
 		} else {
 			conf.mergeProperties(propertyLoader.getProperty());
 			List<String> packageList = propertyLoader.getList("db.package_add");
-			for (String packageName : packageList) {
-				conf.addPackage(packageName);
+			if (packageList != null && !packageList.isEmpty()) {
+				for (String packageName : packageList) {
+					conf.addPackage(packageName);
+				}
 			}
+
 			List<String> classToLoadList = propertyLoader
 					.getList("db.class_load");
-			for (String classes : classToLoadList) {
-				conf.addAnnotatedClass(Class.forName(classes));
+			if (classToLoadList != null && !classToLoadList.isEmpty()) {
+				for (String classes : classToLoadList) {
+					conf.addAnnotatedClass(Class.forName(classes));
+				}
 			}
 
 			factory = conf.buildSessionFactory();
