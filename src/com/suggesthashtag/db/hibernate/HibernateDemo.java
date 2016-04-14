@@ -4,13 +4,13 @@
 package com.suggesthashtag.db.hibernate;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.Properties;
+import java.util.concurrent.ExecutionException;
 
 import org.hibernate.SessionFactory;
-import org.hibernate.cfg.AnnotationConfiguration;
 
-import com.suggesthashtag.db.hibernate.domain.Student;
+import com.suggesthashtag.propertyloader.PropertyLoader;
+import com.suggesthashtag.propertyloader.PropertyLoaderDetails;
+import com.suggesthashtag.propertyloader.exception.PropertyException;
 
 /**
  * @author xspro
@@ -23,20 +23,18 @@ public class HibernateDemo {
 	/**
 	 * @param args
 	 * @throws IOException
+	 * @throws ExecutionException
+	 * @throws InterruptedException
+	 * @throws PropertyException
 	 */
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException,
+			PropertyException, InterruptedException, ExecutionException {
 		// TODO Auto-generated method stub
-		Properties property = new Properties();
-		InputStream inputStream = HibernateDemo.class
-				.getClassLoader()
-				.getResourceAsStream(
-						"demo.properties");
-		property.load(inputStream);
+		PropertyLoader property = new PropertyLoader();
+
+		property.load(new PropertyLoaderDetails("demo.properties"));
 		try {
-			factory = new AnnotationConfiguration().configure()
-					.setProperties(property)
-					.addPackage("com.suggesthashtag.db.hibernate.domain")
-					.addAnnotatedClass(Student.class).buildSessionFactory();
+			factory = DBConnectionInit.getInstance(property).getFactory();
 		} catch (Throwable ex) {
 			System.err.println("Failed to create sessionFactory object." + ex);
 			throw new ExceptionInInitializerError(ex);

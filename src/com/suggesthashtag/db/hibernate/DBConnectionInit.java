@@ -5,6 +5,7 @@ package com.suggesthashtag.db.hibernate;
 
 import java.util.List;
 
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
@@ -16,9 +17,9 @@ import com.suggesthashtag.propertyloader.exception.PropertyException;
  * @author sumitpoddar
  *
  */
-public class DBConnectionInit {
+public final class DBConnectionInit {
 
-	private static DBConnectionInit MY_INSTANCE = new DBConnectionInit();
+	private static DBConnectionInit MY_INSTANCE = null;
 	private static SessionFactory factory = null;
 
 	private DBConnectionInit() {
@@ -48,21 +49,32 @@ public class DBConnectionInit {
 		} else {
 			conf.mergeProperties(propertyLoader.getProperty());
 			List<String> packageList = propertyLoader.getList("db.package_add");
-			for (String packageName : packageList) {
-				conf.addPackage(packageName);
-			}
-			List<String> classToLoadList = propertyLoader
-					.getList("db.class_load");
-			for (String classes : classToLoadList) {
-				conf.addAnnotatedClass(Class.forName(classes));
+			if (packageList != null && !packageList.isEmpty()) {
+				for (String packageName : packageList) {
+					conf.addPackage(packageName);
+				}
 			}
 
+			List<String> classToLoadList = propertyLoader
+					.getList("db.class_load");
+			if (classToLoadList != null && !classToLoadList.isEmpty()) {
+				for (String classes : classToLoadList) {
+					conf.addAnnotatedClass(Class.forName(classes));
+				}
+			}
 			factory = conf.buildSessionFactory();
 		}
 	}
 
-	public SessionFactory getFactory() {
-		return factory;
+	private void closeFactory() {
+		this.factory.close();
 	}
 
+	private Session openDBSesssionFromFactory() {
+		return factory.openSession();
+	}
+
+	public Session getOpenSesssion() {
+		return openDBSesssionFromFactory();
+	}
 }
