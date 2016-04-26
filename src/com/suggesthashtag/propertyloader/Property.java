@@ -5,6 +5,9 @@ package com.suggesthashtag.propertyloader;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Properties;
 
 import com.suggesthashtag.propertyloader.exception.PropertyException;
@@ -19,6 +22,9 @@ public class Property extends Properties {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	public static HashMap<String, List> listHolders = new HashMap<String, List>();
+
+	// private static Map<String hash, V>
 
 	@Override
 	public void load(InputStream inputStream) throws IOException {
@@ -33,6 +39,15 @@ public class Property extends Properties {
 	@Override
 	public String getProperty(String propertyKey, String defaultPropValue) {
 		return super.getProperty(propertyKey, defaultPropValue);
+	}
+
+	public void put(String key, Object value) {
+		if (value instanceof List) {
+			listHolders.put(key, (List) value);
+			super.remove(key);
+		} else {
+			super.put(key, value);
+		}
 	}
 
 	public String extractNFormatPropertyValue(String propertyKey)
@@ -54,6 +69,14 @@ public class Property extends Properties {
 			super.setProperty(propertyKey, propValue);
 		}
 		return propValue;
+	}
+
+	public static HashMap<String, List> getListHolders() {
+		return listHolders;
+	}
+
+	public static void setListHolders(HashMap<String, List> listHolders) {
+		Property.listHolders = listHolders;
 	}
 
 }

@@ -6,6 +6,7 @@ import java.util.concurrent.ExecutionException;
 
 import com.suggesthashtag.db.exception.DBException;
 import com.suggesthashtag.db.hibernate.DBConnectionInit;
+import com.suggesthashtag.logger.LogManager;
 import com.suggesthashtag.logger.exception.LoggerException;
 import com.suggesthashtag.propertyloader.PropertyLoader;
 import com.suggesthashtag.propertyloader.PropertyLoaderDetails;
@@ -17,7 +18,10 @@ import com.suggesthashtag.propertyloader.exception.PropertyException;
  * @author sumitpoddar
  *
  */
-public abstract class AbstractSHTBatchHandler extends SHTMainApp {
+public abstract class AbstractSHTBatchHandler extends LogManager {
+
+	protected static PropertyLoader propertyLoader = null;
+	protected static CommandLineArguments commandLinesArgs = null;
 
 	/**
 	 * @param batchName
@@ -39,9 +43,11 @@ public abstract class AbstractSHTBatchHandler extends SHTMainApp {
 					.println("Command Line arguments loaded. Starting with loading properties file(s)");
 			propertyLoader = new PropertyLoader();
 			loadPropertyFile();
-			initLogger(propertyLoader.getProperty());
+			SHTMainApp.setPropertyLoader(propertyLoader);
+			SHTMainApp.setCommandLinesArgs(commandLinesArgs);
+			initLogger();
 			log("Properties file(s) loaded. Starting with execution of the process.");
-			DBConnectionInit.getInstance(propertyLoader);
+			DBConnectionInit.init();
 			log("Properties file(s) loaded. Starting with execution of the process.");
 			execute();
 			log("Execution complete.");
@@ -77,27 +83,27 @@ public abstract class AbstractSHTBatchHandler extends SHTMainApp {
 			if (getPropertyLoadDetailsList() != null
 					&& getPropertyLoadDetailsList().size() > 0) {
 				tempList.addAll(getPropertyLoadDetailsList());
-				propertyLoader.load(tempList);
-			} else {
+			} else if (getPropertyLoadDetails() != null) {
 				tempList.add(getPropertyLoadDetails());
-				propertyLoader.load(tempList);
 			}
+			propertyLoader.load(tempList);
 		} else {
 			if (getPropertyLoadDetailsList() != null
 					&& getPropertyLoadDetailsList().size() > 0) {
 				propertyLoader.load(getPropertyLoadDetailsList());
-			} else {
+			} else if (getPropertyLoadDetails() != null) {
 				propertyLoader.load(getPropertyLoadDetails());
 			}
 		}
-
+		MainObjectHolder.setPropertyLoader(propertyLoader);
 	}
 
 	protected ArrayList<PropertyLoaderDetails> getALlMainPropertyFiles() {
 		ArrayList<PropertyLoaderDetails> tempList = new ArrayList<PropertyLoaderDetails>();
 		tempList.add(new PropertyLoaderDetails("batchMain.properties", false));
 		tempList.add(new PropertyLoaderDetails("db.properties", false));
-		tempList.add(new PropertyLoaderDetails("messages.properties", false));
+		// tempList.add(new PropertyLoaderDetails("messages.properties",
+		// false));
 		return tempList;
 	}
 

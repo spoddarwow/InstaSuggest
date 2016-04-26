@@ -10,6 +10,8 @@ import java.util.Properties;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
+import com.suggesthashtag.instaapi.framework.MainObjectHolder;
+import com.suggesthashtag.instaapi.framework.SHTMainApp;
 import com.suggesthashtag.logger.exception.LoggerException;
 
 /**
@@ -48,19 +50,24 @@ public abstract class LogManager {
 	/**
 	 * To be implemented as improvement.
 	 */
-	public void initLogger(Properties loggerPropertyConf) throws LoggerException {
+	public void initLogger() throws LoggerException {
 		if (batchName == null || "".equals(batchName)) {
 			throw new LoggerException(
 					"BatchName cannot be null/empty. It is used for logger reference.");
 		}
+		Properties loggerPropertyConf = SHTMainApp.getPropertyLoader()
+				.getProperty();
 		Logger logger = Logger.getLogger(batchName);
-		if (loggerPropertyConf.getProperty("log.filename").contains("{")
-				&& loggerPropertyConf.getProperty("log.filename").contains("}")) {
+		if (loggerPropertyConf.getProperty("log4j.appender.FILE.File")
+				.contains("{")
+				&& loggerPropertyConf.getProperty("log4j.appender.FILE.File")
+						.contains("}")) {
 
 			String formatLoggerFileName = formatLoggerFileName(loggerPropertyConf
-					.getProperty("log.filename"));
-			loggerPropertyConf.remove("log.filename");
-			loggerPropertyConf.put("log.filename", formatLoggerFileName);
+					.getProperty("log4j.appender.FILE.File"));
+			loggerPropertyConf.remove("log4j.appender.FILE.File");
+			loggerPropertyConf.put("log4j.appender.FILE.File",
+					formatLoggerFileName);
 		}
 		PropertyConfigurator.configure(loggerPropertyConf);
 		log("---- Logger object (" + batchName + ") is ready.");

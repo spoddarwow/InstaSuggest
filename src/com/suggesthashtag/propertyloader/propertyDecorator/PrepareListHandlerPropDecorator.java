@@ -9,6 +9,8 @@ import java.util.Set;
 import com.suggesthashtag.propertyloader.Property;
 import com.suggesthashtag.propertyloader.PropertyFormatUtil;
 import com.suggesthashtag.propertyloader.PropertyLoaderDetails;
+import com.suggesthashtag.propertyloader.datatype.DataTypeEnum;
+import com.suggesthashtag.propertyloader.decorateProp.PropertyListHolder;
 import com.suggesthashtag.propertyloader.decorateProp.PropertyLoaderObject;
 import com.suggesthashtag.propertyloader.exception.PropertyException;
 
@@ -70,12 +72,15 @@ public class PrepareListHandlerPropDecorator extends
 						String key = (String) keySetIterator.next();
 						String propValue = property.getProperty(key);
 						if (propValue.toUpperCase().startsWith("LIST<")) {
-							propLoaderObject.getListHolderMap().put(
-									key,
-									PropertyFormatUtil.getInstance()
-											.formatPropertyValueForListType(
-													property.getProperty(key),
-													property));
+							propLoaderObject
+									.getListHolderMap()
+									.put(key,
+											(PropertyListHolder) PropertyFormatUtil
+													.getInstance()
+													.formatPropertyValues(
+															property.getProperty(key),
+															property,
+															DataTypeEnum.LIST));
 						} else {
 							decoratingObject.getFinalProperty().setProperty(
 									key, property.getProperty(key));

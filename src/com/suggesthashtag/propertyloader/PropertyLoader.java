@@ -38,7 +38,7 @@ import com.suggesthashtag.propertyloader.propertyDecorator.PropertyDecoratorPare
  */
 public final class PropertyLoader {
 
-	private Property property = null;
+	private static Property property = null;
 	private volatile HashMap<String, ArrayList<PropertyListHolder>> listDecorateMap = new HashMap<String, ArrayList<PropertyListHolder>>();
 
 	public void load(PropertyLoaderDetails propFileDetails)
@@ -191,6 +191,6 @@ public final class PropertyLoader {
 	}
 
 	public List getList(String propertyKey) throws PropertyException {
-		return (List) this.property.get(propertyKey);
+		return (List) this.property.getListHolders().get(propertyKey);
 	}
 }

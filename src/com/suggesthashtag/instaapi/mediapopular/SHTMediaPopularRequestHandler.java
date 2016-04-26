@@ -3,15 +3,12 @@ package com.suggesthashtag.instaapi.mediapopular;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Hashtable;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import org.apache.http.HttpException;
 
-import com.suggesthashtag.db.hibernate.DBConnectionInit;
 import com.suggesthashtag.instaapi.framework.AbstractSHTBatchHandler;
 import com.suggesthashtag.instaapi.framework.SHTBatchUtil;
 import com.suggesthashtag.instaapi.framework.annotation.ApiBatchAnnotaion;
@@ -25,17 +22,18 @@ import com.suggesthashtag.propertyloader.exception.PropertyException;
 @ApiBatchAnnotaion(requiredCommandLineArgs = { "environment" })
 public class SHTMediaPopularRequestHandler extends AbstractSHTBatchHandler {
 
+	private final static String thisBatchName = "SHTMediaPopularRequestHandler";
+
 	/**
 	 * @param batchName
 	 */
 	public SHTMediaPopularRequestHandler(String batchName) {
 		super(batchName);
-		// TODO Auto-generated constructor stub
 	}
 
 	public static void main(String[] args) {
-		new SHTMediaPopularRequestHandler("SHTMediaPopularRequestHandler")
-				.process(SHTMediaPopularRequestHandler.class, args);
+		new SHTMediaPopularRequestHandler(thisBatchName).process(
+				SHTMediaPopularRequestHandler.class, args);
 	}
 
 	/*
@@ -47,26 +45,17 @@ public class SHTMediaPopularRequestHandler extends AbstractSHTBatchHandler {
 	@Override
 	public void execute() {
 		// Hit the instagram api.
-
 		// Takes 5 ms to load prop files and 1 ms to show value of instaapi.url.
-
 		try {
 			log("Executing the SHTMediaPopularRequestHandler.");
 			HttpConnectionParams httpConnectionParams = SHTBatchUtil
-					.getInstance().buildHttpParam(super.propertyLoader);
+					.getInstance().buildHttpParam();
 			String resultJson = HTTPConnectionUtil.getInstance()
 					.getHttpGetResponse(httpConnectionParams);
 			MediaPopularResponse responseObject = (MediaPopularResponse) SHTBatchUtil
 					.getInstance().convertJsonToObject(resultJson,
 							MediaPopularResponse.class);
-			System.out.println(super.propertyLoader.getString("db.class_load"));
-			HashSet<String> set = new HashSet<String>();
-			set.add("Student");
-			set.add("ABCD");
-			super.propertyLoader.getProperty().put("db.class_load", set);
-			System.out.println(super.propertyLoader.getProperty().get(
-					"db.class_load"));
-			System.out.println(super.propertyLoader.getString("db.class_load"));
+
 			log("Execution over for the SHTMediaPopularRequestHandler. : "
 					+ resultJson);
 
@@ -118,6 +107,17 @@ public class SHTMediaPopularRequestHandler extends AbstractSHTBatchHandler {
 	public List<PropertyLoaderDetails> getPropertyLoadDetailsList() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.suggesthashtag.logger.LogManager#getLoggerName()
+	 */
+	@Override
+	public String getLoggerName() {
+		// TODO Auto-generated method stub
+		return thisBatchName;
 	}
 
 }

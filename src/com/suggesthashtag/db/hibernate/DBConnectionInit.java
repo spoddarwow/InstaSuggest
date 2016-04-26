@@ -10,6 +10,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
 import com.suggesthashtag.db.exception.DBException;
+import com.suggesthashtag.instaapi.framework.SHTMainApp;
 import com.suggesthashtag.propertyloader.PropertyLoader;
 import com.suggesthashtag.propertyloader.exception.PropertyException;
 
@@ -19,20 +20,7 @@ import com.suggesthashtag.propertyloader.exception.PropertyException;
  */
 public final class DBConnectionInit {
 
-	private static DBConnectionInit MY_INSTANCE = null;
 	private static SessionFactory factory = null;
-
-	private DBConnectionInit() {
-
-	}
-
-	public static DBConnectionInit getInstance(PropertyLoader propertyLoader)
-			throws DBException, PropertyException, ClassNotFoundException {
-		if (MY_INSTANCE == null) {
-			init(propertyLoader);
-		}
-		return MY_INSTANCE;
-	}
 
 	/**
 	 * @param property
@@ -40,41 +28,48 @@ public final class DBConnectionInit {
 	 * @throws PropertyException
 	 * @throws ClassNotFoundException
 	 */
-	private static void init(PropertyLoader propertyLoader) throws DBException,
-			PropertyException, ClassNotFoundException {
-		Configuration conf = new Configuration();
-		if (propertyLoader == null) {
-			throw new DBException(
-					"Init of DB Factory failed as property is null.");
-		} else {
-			conf.mergeProperties(propertyLoader.getProperty());
-			List<String> packageList = propertyLoader.getList("db.package_add");
-			if (packageList != null && !packageList.isEmpty()) {
-				for (String packageName : packageList) {
-					conf.addPackage(packageName);
+	public static void init() throws DBException, PropertyException,
+			ClassNotFoundException {
+		if (factory == null) {
+			PropertyLoader propertyLoader = SHTMainApp.getPropertyLoader();
+			Configuration conf = new Configuration();
+			if (propertyLoader == null) {
+				throw new DBException(
+						"Init of DB Factory failed as property is null.");
+			} else {
+				conf.mergeProperties(propertyLoader.getProperty());
+				List<String> packageList = propertyLoader
+						.getList("db.package_add");
+				if (packageList != null && !packageList.isEmpty()) {
+					for (String packageName : packageList) {
+						conf.addPackage(packageName);
+					}
 				}
-			}
 
-			List<String> classToLoadList = propertyLoader
-					.getList("db.class_load");
-			if (classToLoadList != null && !classToLoadList.isEmpty()) {
-				for (String classes : classToLoadList) {
-					conf.addAnnotatedClass(Class.forName(classes));
+				ClassLoader classLoader = DBConnectionInit.class
+						.getClassLoader();
+				List<String> classToLoadList = propertyLoader
+						.getList("db.class_load");
+				if (classToLoadList != null && !classToLoadList.isEmpty()) {
+					for (String classes : classToLoadList) {
+						conf.addAnnotatedClass(classLoader.loadClass(classes));
+					}
 				}
+
+				factory = conf.buildSessionFactory();
 			}
-			factory = conf.buildSessionFactory();
 		}
 	}
 
-	private void closeFactory() {
-		this.factory.close();
+	public static void closeFactory() {
+		factory.close();
 	}
 
-	private Session openDBSesssionFromFactory() {
+	private static Session openDBSesssionFromFactory() {
 		return factory.openSession();
 	}
 
-	public Session getOpenSesssion() {
+	public static Session getOpenSesssion() {
 		return openDBSesssionFromFactory();
 	}
 }

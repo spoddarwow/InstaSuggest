@@ -13,6 +13,7 @@ import org.apache.commons.configuration2.ex.ConfigurationException;
 import org.apache.log4j.Logger;
 import org.hibernate.internal.util.config.ConfigurationHelper;
 
+import com.suggesthashtag.db.hibernate.DBConnectionInit;
 import com.suggesthashtag.logger.LoggerLevel;
 
 /**
@@ -24,8 +25,16 @@ public class Demo {
 	/**
 	 * @param args
 	 * @throws IOException
+	 * @throws ClassNotFoundException
 	 */
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException,
+			ClassNotFoundException {
+
+		ClassLoader classLoader = DBConnectionInit.class.getClassLoader();
+		// classLoader
+		// .loadClass("com.suggesthashtag.api.hibernate.domain.Student");
+		Class clazz = Class
+				.forName("com.suggesthashtag.db.hibernate.domain.Student");
 		Parameters params = new Parameters();
 		CombinedConfigurationBuilder builder = new CombinedConfigurationBuilder()
 				.configure(params.fileBased().setFile(new File("config.xml")));

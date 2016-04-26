@@ -1,6 +1,5 @@
 package com.suggesthashtag.instaapi.framework;
 
-import com.suggesthashtag.logger.LogManager;
 import com.suggesthashtag.propertyloader.PropertyLoader;
 
 /**
@@ -9,36 +8,25 @@ import com.suggesthashtag.propertyloader.PropertyLoader;
  * @author sumitpoddar
  *
  */
-public class SHTMainApp extends LogManager {
+public class SHTMainApp {
 
 	protected static PropertyLoader propertyLoader = null;
 	protected static CommandLineArguments commandLinesArgs = null;
-
-	/**
-	 * @param batchName
-	 */
-	public SHTMainApp(String batchName) {
-		super(batchName);
-		// TODO Auto-generated constructor stub
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.suggesthashtag.logger.LogManager#getLoggerName()
-	 */
-	@Override
-	public String getLoggerName() {
-		// TODO Auto-generated method stub
-		return super.batchName;
-	}
 
 	public static PropertyLoader getPropertyLoader() {
 		return propertyLoader;
 	}
 
+	public static void setPropertyLoader(PropertyLoader propertyLoader) {
+		SHTMainApp.propertyLoader = propertyLoader;
+	}
+
 	public static CommandLineArguments getCommandLinesArgs() {
 		return commandLinesArgs;
+	}
+
+	public static void setCommandLinesArgs(CommandLineArguments commandLinesArgs) {
+		SHTMainApp.commandLinesArgs = commandLinesArgs;
 	}
 
 }

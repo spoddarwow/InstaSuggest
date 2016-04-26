@@ -35,8 +35,9 @@ public class SHTBatchUtil {
 		return MY_INSTANCE;
 	}
 
-	public HttpConnectionParams buildHttpParam(PropertyLoader propertyLoader)
-			throws PropertyException, MalformedURLException, URISyntaxException {
+	public HttpConnectionParams buildHttpParam() throws PropertyException,
+			MalformedURLException, URISyntaxException {
+		PropertyLoader propertyLoader = SHTMainApp.getPropertyLoader();
 		HttpConnectionParams httpParams = new HttpConnectionParams();
 		if (propertyLoader == null) {
 			throw new PropertyException(
