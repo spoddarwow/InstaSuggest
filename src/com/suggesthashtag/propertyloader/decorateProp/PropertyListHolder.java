@@ -9,10 +9,9 @@ import com.suggesthashtag.propertyloader.datatype.DataTypeEnum;
  * @author sumitpoddar
  *
  */
-public class PropertyListHolder {
+public class PropertyListHolder extends PropertyOtherAttributeHolder {
 
 	private DataTypeEnum listTypeClass;
-	private String values;
 
 	/**
 	 * @param listTypeClass
@@ -21,7 +20,7 @@ public class PropertyListHolder {
 	public PropertyListHolder(DataTypeEnum listTypeClass, String listValues) {
 		super();
 		this.listTypeClass = listTypeClass;
-		this.values = listValues;
+		super.values = listValues;
 	}
 
 	public DataTypeEnum getListTypeClass() {
@@ -30,14 +29,6 @@ public class PropertyListHolder {
 
 	public void setListTypeClass(DataTypeEnum listTypeClass) {
 		this.listTypeClass = listTypeClass;
-	}
-
-	public String getValues() {
-		return this.values;
-	}
-
-	public void setValues(String values) {
-		this.values = values;
 	}
 
 }

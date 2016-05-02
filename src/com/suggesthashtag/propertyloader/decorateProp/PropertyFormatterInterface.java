@@ -11,10 +11,9 @@ import com.suggesthashtag.propertyloader.exception.PropertyException;
  * @author sumitpoddar
  *
  */
-public interface PropertyDecoratorInterface {
+public interface PropertyFormatterInterface {
 
-	boolean isCriteriaMetForThisDecorator(String value);
 
-	<T> T decorateProperty(String value, Properties properties)
+	<T> T formatPropertyValue(String value, Properties properties)
 			throws PropertyException;
 }

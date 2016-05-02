@@ -22,7 +22,7 @@ public enum DataTypeEnum {
 			new BasicBooleanType()), STRING(String.class,
 			new StringListPropertyLoader(), new BasicStringType()), FLOAT(
 			Float.class, new IntegerListPropertyLoader(), new BasicFloatType()), LIST(
-			List.class, null, null);
+			List.class, null, null), OBJECT(Object.class, null, null);
 
 	private Class dataTypeClass;
 	private ListPropertyLoaderInterface listPropertyLoader;

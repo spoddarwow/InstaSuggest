@@ -5,14 +5,8 @@ package com.suggesthashtag.propertyloader;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 import com.suggesthashtag.propertyloader.datatype.AbstractDataType;
 import com.suggesthashtag.propertyloader.datatype.BasicBooleanType;
@@ -22,13 +16,12 @@ import com.suggesthashtag.propertyloader.datatype.BasicIntegerType;
 import com.suggesthashtag.propertyloader.datatype.BasicStringType;
 import com.suggesthashtag.propertyloader.datatype.DataTypeEnum;
 import com.suggesthashtag.propertyloader.decorateProp.PropertyListHolder;
-import com.suggesthashtag.propertyloader.decorateProp.PropertyLoaderObject;
-import com.suggesthashtag.propertyloader.decorateProp.PropertyValueDecoratorThread;
 import com.suggesthashtag.propertyloader.exception.PropertyException;
 import com.suggesthashtag.propertyloader.propertyDecorator.BuildListToPropertyPropDecorator;
+import com.suggesthashtag.propertyloader.propertyDecorator.BuildObjectToPropertyPropDecorator;
 import com.suggesthashtag.propertyloader.propertyDecorator.BuildPropertyValuesPropDecorator;
 import com.suggesthashtag.propertyloader.propertyDecorator.LoadPropertyFromFilePropDecorator;
-import com.suggesthashtag.propertyloader.propertyDecorator.PrepareListHandlerPropDecorator;
+import com.suggesthashtag.propertyloader.propertyDecorator.PrepareOtherTypeHandlerPropDecorator;
 import com.suggesthashtag.propertyloader.propertyDecorator.PropertyDecoratorInterface;
 import com.suggesthashtag.propertyloader.propertyDecorator.PropertyDecoratorObject;
 import com.suggesthashtag.propertyloader.propertyDecorator.PropertyDecoratorParentImpl;
@@ -61,21 +54,17 @@ public final class PropertyLoader {
 				propFileDetailList);
 
 		long start = System.currentTimeMillis();
-		PropertyDecoratorInterface propertyDecorator = new BuildListToPropertyPropDecorator(
-				new BuildPropertyValuesPropDecorator(
-						new PrepareListHandlerPropDecorator(
-								new LoadPropertyFromFilePropDecorator(
-										new PropertyDecoratorParentImpl()))));
+		PropertyDecoratorInterface propertyDecorator = new BuildObjectToPropertyPropDecorator(
+				new BuildListToPropertyPropDecorator(
+						new BuildPropertyValuesPropDecorator(
+								new PrepareOtherTypeHandlerPropDecorator(
+										new LoadPropertyFromFilePropDecorator(
+												new PropertyDecoratorParentImpl())))));
 		decoratorObject = propertyDecorator
 				.processPropertyFiles(decoratorObject);
 		property = decoratorObject.getFinalProperty();
 		System.out.println("Time to load : "
 				+ (System.currentTimeMillis() - start));
-	}
-
-	private void propertyLoading(List<PropertyLoaderDetails> propFileDetailList) {
-		property = new Property();
-
 	}
 
 	public synchronized HashMap<String, ArrayList<PropertyListHolder>> getPropertyListHolder() {
@@ -192,5 +181,9 @@ public final class PropertyLoader {
 
 	public List getList(String propertyKey) throws PropertyException {
 		return (List) this.property.getListHolders().get(propertyKey);
+	}
+
+	public Object getObject(String propertyKey) throws PropertyException {
+		return this.property.getObjectHolders().get(propertyKey);
 	}
 }

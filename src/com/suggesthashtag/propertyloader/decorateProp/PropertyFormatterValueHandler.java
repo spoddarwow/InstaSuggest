@@ -11,21 +11,8 @@ import com.suggesthashtag.propertyloader.exception.PropertyException;
  * @author sumitpoddar
  *
  */
-public class PropertyDecoratorValueHandler implements
-		PropertyDecoratorInterface {
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.suggesthashtag.propertyloader.decorateProp.PropertyDecoratorInterface
-	 * #isCriteriaMetForThisDecorator(java.lang.String)
-	 */
-	@Override
-	public boolean isCriteriaMetForThisDecorator(String value) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+public class PropertyFormatterValueHandler implements
+		PropertyFormatterInterface {
 
 	/*
 	 * (non-Javadoc)
@@ -36,7 +23,7 @@ public class PropertyDecoratorValueHandler implements
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T> T decorateProperty(String value, Properties properties)
+	public <T> T formatPropertyValue(String value, Properties properties)
 			throws PropertyException {
 
 		boolean dynamicPropValOn = false;
@@ -66,7 +53,7 @@ public class PropertyDecoratorValueHandler implements
 						if (properties.getProperty(dynamicPropValueKey
 								.toString(), System
 								.getProperty(dynamicPropValueKey.toString())) != null) {
-							formattedPropertyValue.append(decorateProperty(
+							formattedPropertyValue.append(formatPropertyValue(
 									properties.getProperty(dynamicPropValueKey
 											.toString(), System
 											.getProperty(dynamicPropValueKey

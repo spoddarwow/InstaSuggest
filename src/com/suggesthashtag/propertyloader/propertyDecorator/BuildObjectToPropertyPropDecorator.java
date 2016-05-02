@@ -8,16 +8,18 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import com.google.gson.Gson;
 import com.suggesthashtag.propertyloader.PropertyLoaderDetails;
-import com.suggesthashtag.propertyloader.decorateProp.PropertyListHolder;
+import com.suggesthashtag.propertyloader.datatype.PropertyObjects;
 import com.suggesthashtag.propertyloader.decorateProp.PropertyLoaderObject;
+import com.suggesthashtag.propertyloader.decorateProp.PropertyObjectHolder;
 import com.suggesthashtag.propertyloader.exception.PropertyException;
 
 /**
  * @author sumitpoddar
  *
  */
-public class BuildListToPropertyPropDecorator extends
+public class BuildObjectToPropertyPropDecorator extends
 		PropertyDecoratorImplementation {
 
 	private PropertyDecoratorInterface decoratorInterface;
@@ -34,10 +36,12 @@ public class BuildListToPropertyPropDecorator extends
 	/**
 	 * @param decoratorInterface
 	 */
-	public BuildListToPropertyPropDecorator(
+	public BuildObjectToPropertyPropDecorator(
 			PropertyDecoratorInterface decoratorInterface) {
+
 		super(decoratorInterface);
 		this.decoratorInterface = decoratorInterface;
+
 	}
 
 	/*
@@ -52,46 +56,51 @@ public class BuildListToPropertyPropDecorator extends
 	public PropertyDecoratorObject processPropertyFiles(
 			PropertyDecoratorObject decoratingObject) throws PropertyException {
 		decoratingObject = super.processPropertyFiles(decoratingObject);
+		Gson gsonBuilder = new Gson();
 		if (decoratingObject != null
 				&& !decoratingObject.getPropertyLoaderList().isEmpty()) {
-			List<PropertyLoaderDetails> listPropToProcess = decoratingObject
+			List<PropertyLoaderDetails> objectPropToProcess = decoratingObject
 					.getPropertyLoaderList();
-			for (int index = 0; index < listPropToProcess.size(); index++) {
-				PropertyLoaderDetails propertyFile = listPropToProcess
+			for (int index = 0; index < objectPropToProcess.size(); index++) {
+				PropertyLoaderDetails propertyFile = objectPropToProcess
 						.get(index);
 				PropertyLoaderObject propLoaderObject = decoratingObject
 						.getProcessingPropertiesMap().get(
 								propertyFile.toString());
 				if (propLoaderObject != null
-						&& propLoaderObject.getListHolderMap() != null
-						&& propLoaderObject.getListHolderMap().size() > 0) {
-					HashMap<String, PropertyListHolder> propertyListHolder = propLoaderObject
-							.getListHolderMap();
-					Set<String> keySet = propertyListHolder.keySet();
+						&& propLoaderObject.getPropertyObjectHolderMap() != null
+						&& propLoaderObject.getPropertyObjectHolderMap().size() > 0) {
+					HashMap<String, PropertyObjectHolder> propertyObjectHolder = propLoaderObject
+							.getPropertyObjectHolderMap();
+					Set<String> keySet = propertyObjectHolder.keySet();
 					Iterator<String> keySetIterator = keySet.iterator();
 					while (keySetIterator.hasNext()) {
 						String key = (String) keySetIterator.next();
-						PropertyListHolder propListValue = propertyListHolder
+						PropertyObjectHolder propListValue = propertyObjectHolder
 								.get(key);
-						if (propListValue.getListTypeClass() != null
+						if (propListValue.getJsonObjectClass() != null
 								&& propListValue.getValues() != null) {
-							List valueAsList = (List) decoratingObject
-									.getFinalProperty().get(key);
-							if (valueAsList == null) {
-								valueAsList = propListValue.getListTypeClass()
-										.getListPropertyLoader()
-										.initializeArrayList();
+							gsonBuilder = new Gson();
+							Class<? extends PropertyObjects> jsonClazz;
+							try {
+								jsonClazz = (Class<? extends PropertyObjects>) Class
+										.forName(decoratingObject
+												.getFinalProperty()
+												.getProperty(
+														propListValue
+																.getJsonObjectClass()));
+							} catch (ClassNotFoundException exception) {
+								// TODO Auto-generated catch block
+								exception.printStackTrace();
+								throw new PropertyException(
+										exception.getMessage());
 							}
-							String listValues = propListValue.getValues();
-							String[] listValueSplit = listValues.split(",");
-							for (String listValue : listValueSplit) {
-								valueAsList.add(propListValue
-										.getListTypeClass()
-										.getParserDataTypeClass()
-										.getValue(listValue.trim()));
-							}
-							decoratingObject.getFinalProperty().put(key,
-									valueAsList);
+
+							decoratingObject.getFinalProperty().put(
+									key,
+									gsonBuilder.fromJson(
+											propListValue.getValues(),
+											jsonClazz));
 						}
 
 					}

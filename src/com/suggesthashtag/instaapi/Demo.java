@@ -11,7 +11,6 @@ import org.apache.commons.configuration2.builder.combined.CombinedConfigurationB
 import org.apache.commons.configuration2.builder.fluent.Parameters;
 import org.apache.commons.configuration2.ex.ConfigurationException;
 import org.apache.log4j.Logger;
-import org.hibernate.internal.util.config.ConfigurationHelper;
 
 import com.suggesthashtag.db.hibernate.DBConnectionInit;
 import com.suggesthashtag.logger.LoggerLevel;
@@ -31,10 +30,10 @@ public class Demo {
 			ClassNotFoundException {
 
 		ClassLoader classLoader = DBConnectionInit.class.getClassLoader();
-		// classLoader
-		// .loadClass("com.suggesthashtag.api.hibernate.domain.Student");
+		classLoader
+				.loadClass("SHTMediaPopularAPITracker");
 		Class clazz = Class
-				.forName("com.suggesthashtag.db.hibernate.domain.Student");
+				.forName("com.suggesthashtag.db.hibernate.domain.SHTMediaPopularAPITracker");
 		Parameters params = new Parameters();
 		CombinedConfigurationBuilder builder = new CombinedConfigurationBuilder()
 				.configure(params.fileBased().setFile(new File("config.xml")));

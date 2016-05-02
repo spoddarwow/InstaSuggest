@@ -13,11 +13,16 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.Formula;
+
+import com.suggesthashtag.instaapi.framework.SHTMainApp;
+import com.suggesthashtag.propertyloader.PropertyLoader;
 
 /**
  * @author sumitpoddar
@@ -34,48 +39,66 @@ public class SHTMediaPopularAPITracker implements DBHibernateObject {
 	 */
 	private static final long serialVersionUID = 1L;
 
+	@Transient
+	private static final int totalLimitForThisApi = 0;
+
+	/**
+	 * 
+	 */
+	public SHTMediaPopularAPITracker() {
+		PropertyLoader thisApiPropertyLoader = SHTMainApp.getPropertyLoader();
+		//totalLimitForThisApi = thisApiPropertyLoader.
+	}
+
 	@Id
 	@Column(name = "SHT_IG_REQ_ID")
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_IG_REQ_ID")
-	public long shtIgReqId;
+	@SequenceGenerator(name = "SEQ_IG_REQ_ID", sequenceName = "SEQ_IG_REQ_ID")
+	private long shtIgReqId;
 
 	@Column(name = "SHT_REQ_API_CD")
-	public String shtAPIReguestCode;
+	private String shtAPIReguestCode;
 
 	@Column(name = "SHT_REQ_API_URL")
-	public String shtAPIRequestUrl;
+	private String shtAPIRequestUrl;
 
+	/*
+	 * @Lob @Basic(fetch = FetchType.LAZY)
+	 * 
+	 * @Column(name = "SHT_API_RESPONSE")
+	 */
 	@Lob
-	@Basic(fetch = FetchType.LAZY)
-	@Column(name = "SHT_API_RESPONSE")
-	public String shtAPIResponse;
+	@Basic(fetch = FetchType.EAGER)
+	@Column(name = "SHT_API_RESPONSE", columnDefinition = "CLOB", nullable = true)
+	private String shtAPIResponse;
 
+	/*
+	 * @Lob @Basic(fetch = FetchType.LAZY)
+	 * 
+	 * @Column(name = "SHT_API_EXCEPTION")
+	 */
 	@Lob
-	@Basic(fetch = FetchType.LAZY)
-	@Column(name = "SHT_API_EXCEPTION")
-	public String shtAPIException;
+	@Basic(fetch = FetchType.EAGER)
+	@Column(name = "SHT_API_EXCEPTION", columnDefinition = "CLOB", nullable = true)
+	private String shtAPIException;
 
 	@Column(name = "SHT_REQ_TOT_CT")
 	@Formula("SHT_REQ_TOT_CT + 1")
-	public int shtReqTotalCount;
+	private int shtReqTotalCount;
 
 	@Column(name = "SHT_REQ_TOT_CT_REM")
 	@Formula("SHT_REQ_TOT_CT_REM - 1")
-	public int shtReqTotalCountRemaining;
+	private int shtReqTotalCountRemaining;
 
 	@Column(name = "SHT_REQ_API_CT")
-	public int shtReqAPICount;
+	private int shtReqAPICount;
 
 	@Column(name = "SHT_REQ_API_CT_REM")
-	public int shtReqAPICountRemaining;
+	private int shtReqAPICountRemaining;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "SHT_REQ_MD_DT")
-	public Date shtRequestModifiedDate;
-
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "SHT_REQ_CT_DT")
-	public Date shtRequestCreatedDate;
+	@Column(name = "SHT_REQ_CT_DT", updatable = false)
+	private Date shtRequestCreatedDate = new Date();
 
 	public long getShtIgReqId() {
 		return this.shtIgReqId;
@@ -147,14 +170,6 @@ public class SHTMediaPopularAPITracker implements DBHibernateObject {
 
 	public void setShtReqAPICountRemaining(int shtReqAPICountRemaining) {
 		this.shtReqAPICountRemaining = shtReqAPICountRemaining;
-	}
-
-	public Date getShtRequestModifiedDate() {
-		return this.shtRequestModifiedDate;
-	}
-
-	public void setShtRequestModifiedDate(Date shtRequestModifiedDate) {
-		this.shtRequestModifiedDate = shtRequestModifiedDate;
 	}
 
 	public Date getShtRequestCreatedDate() {

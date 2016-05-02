@@ -14,7 +14,7 @@ import com.suggesthashtag.propertyloader.exception.PropertyException;
  * @author sumitpoddar
  *
  */
-public class PropertyDecoratorListHandler implements PropertyDecoratorInterface {
+public class PropertyFormatterListHandler implements PropertyFormatterInterface {
 
 	/*
 	 * (non-Javadoc)
@@ -25,12 +25,13 @@ public class PropertyDecoratorListHandler implements PropertyDecoratorInterface 
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T> T decorateProperty(String value, Properties properties)
+	public <T> T formatPropertyValue(String value, Properties properties)
 			throws PropertyException {
 		Object returningObject = null;
 		String listValues = "";
 		DataTypeEnum listDataType = null;
 		if (value != null && !"".equals(value)) {
+			// Get type of list.
 			Pattern pattern = Pattern.compile("List<([a-zA-Z]+)>\\[(.*)\\]$",
 					Pattern.CASE_INSENSITIVE);
 			Matcher matcher = pattern.matcher(value);
@@ -64,19 +65,6 @@ public class PropertyDecoratorListHandler implements PropertyDecoratorInterface 
 		}
 		return (T) returningObject;
 
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.suggesthashtag.propertyloader.decorateProp.PropertyDecoratorInterface
-	 * #isCriteriaMetForThisDecorator(java.lang.String)
-	 */
-	@Override
-	public boolean isCriteriaMetForThisDecorator(String value) {
-		return value.trim().toLowerCase().startsWith("List<")
-				&& value.contains(">[") && value.trim().endsWith("]");
 	}
 
 }

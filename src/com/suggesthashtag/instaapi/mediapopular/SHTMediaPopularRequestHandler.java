@@ -3,7 +3,6 @@ package com.suggesthashtag.instaapi.mediapopular;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
-import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -18,6 +17,7 @@ import com.suggesthashtag.instaapi.httpconnection.HttpConnectionParams;
 import com.suggesthashtag.instaapi.response.bean.MediaPopularResponse;
 import com.suggesthashtag.propertyloader.PropertyLoaderDetails;
 import com.suggesthashtag.propertyloader.exception.PropertyException;
+import com.suggesthashtag.propertyloader.jsonObjects.apiCount.InstaApiCountManager;
 
 @ApiBatchAnnotaion(requiredCommandLineArgs = { "environment" })
 public class SHTMediaPopularRequestHandler extends AbstractSHTBatchHandler {
@@ -55,32 +55,15 @@ public class SHTMediaPopularRequestHandler extends AbstractSHTBatchHandler {
 			MediaPopularResponse responseObject = (MediaPopularResponse) SHTBatchUtil
 					.getInstance().convertJsonToObject(resultJson,
 							MediaPopularResponse.class);
-
+			InstaApiCountManager countManager = (InstaApiCountManager) propertyLoader
+					.getObject("apiToConsider");
+			System.out.println(countManager);
 			log("Execution over for the SHTMediaPopularRequestHandler. : "
 					+ resultJson);
 
-		} catch (MalformedURLException exception) {
-			// TODO Auto-generated catch block
-			exception.printStackTrace();
-		} catch (PropertyException exception) {
-			// TODO Auto-generated catch block
-			exception.printStackTrace();
-		} catch (URISyntaxException exception) {
-			// TODO Auto-generated catch block
-			exception.printStackTrace();
-		} catch (HttpConnectionException exception) {
-			// TODO Auto-generated catch block
-			exception.printStackTrace();
-		} catch (IOException exception) {
-			// TODO Auto-generated catch block
-			exception.printStackTrace();
-		} catch (HttpException exception) {
-			// TODO Auto-generated catch block
-			exception.printStackTrace();
-		} catch (InterruptedException exception) {
-			// TODO Auto-generated catch block
-			exception.printStackTrace();
-		} catch (ExecutionException exception) {
+		} catch (PropertyException | URISyntaxException
+				| HttpConnectionException | IOException | HttpException
+				| InterruptedException | ExecutionException exception) {
 			// TODO Auto-generated catch block
 			exception.printStackTrace();
 		}
@@ -94,7 +77,7 @@ public class SHTMediaPopularRequestHandler extends AbstractSHTBatchHandler {
 	 */
 	@Override
 	public PropertyLoaderDetails getPropertyLoadDetails() {
-		return new PropertyLoaderDetails("mediaPopular.properties", false);
+		return new PropertyLoaderDetails("mediaPopular.properties");
 	}
 
 	/*

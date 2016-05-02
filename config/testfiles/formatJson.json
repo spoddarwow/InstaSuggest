@@ -1,0 +1,10 @@
+{  
+   "totalApiCount":"500",
+   "apis":[  
+      {  
+         "apiURL":"/v1/media/popular",
+         "apiCode":"MED_POP",
+         "apiCount":"-1"
+      }
+   ]
+}

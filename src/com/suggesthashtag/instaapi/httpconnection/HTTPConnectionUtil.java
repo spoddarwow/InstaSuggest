@@ -21,6 +21,8 @@ import org.apache.http.nio.client.methods.HttpAsyncMethods;
 import org.apache.http.nio.protocol.HttpAsyncRequestProducer;
 import org.apache.http.util.EntityUtils;
 
+import com.suggesthashtag.db.hibernate.DBUtil;
+import com.suggesthashtag.db.hibernate.domain.SHTMediaPopularAPITracker;
 import com.suggesthashtag.instaapi.beans.HttpResultBean;
 import com.suggesthashtag.instaapi.httpconnection.httpProxy.HttpProxyType;
 
@@ -58,6 +60,9 @@ public class HTTPConnectionUtil {
 			HttpConnectionParams httpConnectionParams,
 			HttpRequestBase httpRequestBase) throws HttpConnectionException,
 			IOException, HttpException {
+		SHTMediaPopularAPITracker apiTracker = new SHTMediaPopularAPITracker();
+		apiTracker.setShtAPIRequestUrl(httpConnectionParams.getRequestUri()
+				.toString());
 		String apiResponse = "";
 		RequestConfig requestConfig = null;
 		if (httpConnectionParams == null) {
@@ -86,9 +91,11 @@ public class HTTPConnectionUtil {
 		} catch (InterruptedException exception) {
 			// TODO Auto-generated catch block
 			exception.printStackTrace();
+			apiTracker.setShtAPIException(exception.getMessage());
 		} catch (ExecutionException exception) {
 			// TODO Auto-generated catch block
 			exception.printStackTrace();
+			apiTracker.setShtAPIException(exception.getMessage());
 		} finally {
 			connectionPool.close();
 		}
@@ -97,9 +104,12 @@ public class HTTPConnectionUtil {
 			HttpEntity entity = resultBean.getEntity();
 			if (entity != null) {
 				apiResponse = EntityUtils.toString(entity, "UTF8");
+				//apiTracker.setShtAPIResponse(apiResponse);
 			}
 
 		}
+
+		DBUtil.insertObject(apiTracker);
 
 		return apiResponse;
 

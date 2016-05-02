@@ -12,13 +12,14 @@ import com.suggesthashtag.propertyloader.PropertyLoaderDetails;
 import com.suggesthashtag.propertyloader.datatype.DataTypeEnum;
 import com.suggesthashtag.propertyloader.decorateProp.PropertyListHolder;
 import com.suggesthashtag.propertyloader.decorateProp.PropertyLoaderObject;
+import com.suggesthashtag.propertyloader.decorateProp.PropertyObjectHolder;
 import com.suggesthashtag.propertyloader.exception.PropertyException;
 
 /**
  * @author sumitpoddar
  *
  */
-public class PrepareListHandlerPropDecorator extends
+public class PrepareOtherTypeHandlerPropDecorator extends
 		PropertyDecoratorImplementation {
 
 	private PropertyDecoratorInterface decoratorInterface;
@@ -35,7 +36,7 @@ public class PrepareListHandlerPropDecorator extends
 	/**
 	 * @param decoratorInterface
 	 */
-	public PrepareListHandlerPropDecorator(
+	public PrepareOtherTypeHandlerPropDecorator(
 			PropertyDecoratorInterface decoratorInterface) {
 		super(decoratorInterface);
 		this.decoratorInterface = decoratorInterface;
@@ -73,17 +74,25 @@ public class PrepareListHandlerPropDecorator extends
 						String propValue = property.getProperty(key);
 						if (propValue.toUpperCase().startsWith("LIST<")) {
 							propLoaderObject
-									.getListHolderMap()
 									.put(key,
 											(PropertyListHolder) PropertyFormatUtil
 													.getInstance()
 													.formatPropertyValues(
-															property.getProperty(key),
+															propValue,
 															property,
 															DataTypeEnum.LIST));
+						} else if (propValue.toUpperCase()
+								.startsWith("OBJECT<")) {
+							propLoaderObject.put(
+									key,
+									(PropertyObjectHolder) PropertyFormatUtil
+											.getInstance()
+											.formatPropertyValues(propValue,
+													property,
+													DataTypeEnum.OBJECT));
 						} else {
 							decoratingObject.getFinalProperty().setProperty(
-									key, property.getProperty(key));
+									key, propValue);
 						}
 					}
 					decoratingObject.getProcessingPropertiesMap().put(

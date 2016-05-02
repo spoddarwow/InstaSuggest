@@ -52,10 +52,10 @@ public final class DBConnectionInit {
 						.getList("db.class_load");
 				if (classToLoadList != null && !classToLoadList.isEmpty()) {
 					for (String classes : classToLoadList) {
-						conf.addAnnotatedClass(classLoader.loadClass(classes));
+						conf.addAnnotatedClass(classLoader
+								.loadClass(propertyLoader.getString(classes)));
 					}
 				}
-
 				factory = conf.buildSessionFactory();
 			}
 		}

@@ -51,25 +51,11 @@ public abstract class AbstractSHTBatchHandler extends LogManager {
 			log("Properties file(s) loaded. Starting with execution of the process.");
 			execute();
 			log("Execution complete.");
-		} catch (PropertyException exception) {
+		} catch (PropertyException | LoggerException | InterruptedException
+				| ExecutionException | DBException | ClassNotFoundException exception) {
 			// TODO Auto-generated catch block
 			exception.printStackTrace();
 			System.exit(1);
-		} catch (LoggerException exception) {
-			// TODO Auto-generated catch block
-			exception.printStackTrace();
-		} catch (InterruptedException exception) {
-			// TODO Auto-generated catch block
-			exception.printStackTrace();
-		} catch (ExecutionException exception) {
-			// TODO Auto-generated catch block
-			exception.printStackTrace();
-		} catch (DBException exception) {
-			// TODO Auto-generated catch block
-			exception.printStackTrace();
-		} catch (ClassNotFoundException exception) {
-			// TODO Auto-generated catch block
-			exception.printStackTrace();
 		}
 		log("Batch process for " + callerClass.getName()
 				+ " is finished successfully.");
@@ -100,10 +86,10 @@ public abstract class AbstractSHTBatchHandler extends LogManager {
 
 	protected ArrayList<PropertyLoaderDetails> getALlMainPropertyFiles() {
 		ArrayList<PropertyLoaderDetails> tempList = new ArrayList<PropertyLoaderDetails>();
-		tempList.add(new PropertyLoaderDetails("batchMain.properties", false));
-		tempList.add(new PropertyLoaderDetails("db.properties", false));
-		// tempList.add(new PropertyLoaderDetails("messages.properties",
-		// false));
+		tempList.add(new PropertyLoaderDetails("classes.properties",
+				"universal"));
+		tempList.add(new PropertyLoaderDetails("batchMain.properties"));
+		tempList.add(new PropertyLoaderDetails("db.properties"));
 		return tempList;
 	}
 
