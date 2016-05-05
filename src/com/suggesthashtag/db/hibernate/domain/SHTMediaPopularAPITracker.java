@@ -46,8 +46,6 @@ public class SHTMediaPopularAPITracker implements DBHibernateObject {
 	 * 
 	 */
 	public SHTMediaPopularAPITracker() {
-		PropertyLoader thisApiPropertyLoader = SHTMainApp.getPropertyLoader();
-		//totalLimitForThisApi = thisApiPropertyLoader.
 	}
 
 	@Id

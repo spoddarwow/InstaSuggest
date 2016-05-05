@@ -3,6 +3,8 @@
  */
 package com.suggesthashtag.db.hibernate;
 
+import java.util.List;
+
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 
@@ -95,5 +97,31 @@ public class DBUtil {
 
 	public static Session getPersistentDBSession() {
 		return DBConnectionInit.getOpenSesssion();
+	}
+
+	public static boolean insertObjects(List<DBHibernateObject> dbObjects,
+			int batchSize) {
+		Session thisSession = getPersistentDBSession();
+		boolean isSuccess = true;
+		try {
+			thisSession.beginTransaction();
+			for (int i = 0; i < dbObjects.size(); i++) {
+				DBHibernateObject dbObject = dbObjects.get(i);
+				DBCrudOperations.I.getOperationObject().process(thisSession,
+						dbObject);
+				if (i != 0 && i % batchSize == 0) {
+					thisSession.flush();
+					thisSession.clear();
+				}
+			}
+			thisSession.getTransaction().commit();
+		} catch (HibernateException e) {
+			e.printStackTrace();
+			thisSession.getTransaction().rollback();
+			isSuccess = false;
+		} finally {
+			thisSession.close();
+		}
+		return isSuccess;
 	}
 }

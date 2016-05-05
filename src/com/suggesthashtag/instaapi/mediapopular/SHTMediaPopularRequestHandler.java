@@ -15,6 +15,7 @@ import com.suggesthashtag.instaapi.httpconnection.HTTPConnectionUtil;
 import com.suggesthashtag.instaapi.httpconnection.HttpConnectionException;
 import com.suggesthashtag.instaapi.httpconnection.HttpConnectionParams;
 import com.suggesthashtag.instaapi.response.bean.MediaPopularResponse;
+import com.suggesthashtag.logger.LoggerLevel;
 import com.suggesthashtag.propertyloader.PropertyLoaderDetails;
 import com.suggesthashtag.propertyloader.exception.PropertyException;
 import com.suggesthashtag.propertyloader.jsonObjects.apiCount.InstaApiCountManager;
@@ -55,9 +56,6 @@ public class SHTMediaPopularRequestHandler extends AbstractSHTBatchHandler {
 			MediaPopularResponse responseObject = (MediaPopularResponse) SHTBatchUtil
 					.getInstance().convertJsonToObject(resultJson,
 							MediaPopularResponse.class);
-			InstaApiCountManager countManager = (InstaApiCountManager) propertyLoader
-					.getObject("apiToConsider");
-			System.out.println(countManager);
 			log("Execution over for the SHTMediaPopularRequestHandler. : "
 					+ resultJson);
 
@@ -65,7 +63,8 @@ public class SHTMediaPopularRequestHandler extends AbstractSHTBatchHandler {
 				| HttpConnectionException | IOException | HttpException
 				| InterruptedException | ExecutionException exception) {
 			// TODO Auto-generated catch block
-			exception.printStackTrace();
+			log(LoggerLevel.ERROR, exception.getMessage(),
+					exception.fillInStackTrace());
 		}
 	}
 

@@ -6,7 +6,6 @@ package com.suggesthashtag.logger.events;
 import org.apache.log4j.Logger;
 
 import com.suggesthashtag.logger.BasicLogObject;
-import com.suggesthashtag.logger.LoggerConstant;
 
 /**
  * @author sumitpoddar
